@@ -1,6 +1,7 @@
 const siteMetadata = {
   title: 'Mickey-Baby',
   author: 'Tails Azimuth',
+  keywords: '刘泽奇，刘泽奇的博客，泽奇blog，快乐',
   headerTitle: '咦～',
   description: '不要因为你的懦弱，导致我们俩个人的寂寞。',
   language: 'en-us',
