@@ -1,10 +1,10 @@
 const siteMetadata = {
   title: 'Mickey-Baby',
-  author: 'Tails Azimuth',
+  author: '____泽奇',
   keywords: '刘泽奇，刘泽奇的博客，泽奇blog，快乐',
   headerTitle: '再倒一杯酒。',
   description: '不以物喜，不以己悲。',
-  language: 'en-us',
+  language: 'cmn-Hans-CN',
   siteUrl: 'https://tailwind-nextjs-starter-blog.vercel.app',
   siteRepo: 'https://github.com/timlrx/tailwind-nextjs-starter-blog',
   siteLogo: '/static/images/beer.svg',
@@ -16,6 +16,7 @@ const siteMetadata = {
   facebook: 'https://facebook.com',
   youtube: 'https://youtube.com',
   linkedin: 'https://www.linkedin.com',
+  qq: `//message/?uin=405059000&Site=&Menu-=yes`,
   locale: 'en-US',
   analytics: {
     // supports plausible, simpleAnalytics or googleAnalytics
