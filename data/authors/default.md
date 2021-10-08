@@ -1,5 +1,5 @@
 ---
-name: 待我想个牛逼的名字
+name: lover_boy
 avatar: /static/images/avatar.jpg
 occupation: 狗都不爱的程序员
 company: 火花思维
