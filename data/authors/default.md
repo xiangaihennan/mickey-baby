@@ -1,7 +1,7 @@
 ---
 name: lover_boy
 avatar: /static/images/avatar.jpg
-occupation: 狗都不爱的程序员
+occupation: hiphop Man
 company: 火花思维
 email: 405059000@qq.com
 qq: //message/?uin=405059000&Site=&Menu-=yes

@@ -40,6 +40,7 @@ export async function getStaticProps({ params }) {
 
 export default function Tag({ posts, tag }) {
   // Capitalize first letter and convert space to dash
+  console.log(posts, tag, 'ooooooooooooooo')
   const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
   return (
     <>

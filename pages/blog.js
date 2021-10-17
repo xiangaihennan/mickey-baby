@@ -8,6 +8,7 @@ export const POSTS_PER_PAGE = 5
 export async function getStaticProps() {
   const posts = await getAllFilesFrontMatter('blog')
   const initialDisplayPosts = posts.slice(0, POSTS_PER_PAGE)
+  console.log(posts.length, 'ollllllllllllllllllll')
   const pagination = {
     currentPage: 1,
     totalPages: Math.ceil(posts.length / POSTS_PER_PAGE),
@@ -19,7 +20,7 @@ export async function getStaticProps() {
 export default function Blog({ posts, initialDisplayPosts, pagination }) {
   return (
     <>
-      <PageSEO title={`Blog - ${siteMetadata.author}`} description={siteMetadata.description} />
+      <PageSEO title={`${siteMetadata.author}`} description={siteMetadata.description} />
       <ListLayout
         posts={posts}
         initialDisplayPosts={initialDisplayPosts}

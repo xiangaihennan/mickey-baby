@@ -1,8 +1,8 @@
 const siteMetadata = {
-  title: 'Mickey-Baby',
-  author: '____泽奇',
+  title: 'Human',
+  author: 'Macho Man',
   keywords: '刘泽奇，刘泽奇的博客，泽奇blog，快乐',
-  headerTitle: '再倒一杯酒。',
+  headerTitle: 'keep happy',
   description: '不以物喜，不以己悲。',
   language: 'cmn-Hans-CN',
   siteUrl: 'https://tailwind-nextjs-starter-blog.vercel.app',

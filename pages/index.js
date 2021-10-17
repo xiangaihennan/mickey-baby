@@ -11,7 +11,6 @@ const MAX_DISPLAY = 5
 
 export async function getStaticProps() {
   const posts = await getAllFilesFrontMatter('blog')
-  console.log(posts, 'lllllllllllllllllll')
   return { props: { posts } }
 }
 
@@ -87,7 +86,7 @@ export default function Home({ posts }) {
             className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
             aria-label="all posts"
           >
-            All Posts &rarr;
+            查看更多 &rarr;
           </Link>
         </div>
       )}
