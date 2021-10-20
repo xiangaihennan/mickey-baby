@@ -1,7 +1,7 @@
 ---
-name: lover_boy
+name: Mickey—baby
 avatar: /static/images/avatar.jpg
-occupation: hiphop Man
+occupation: FE
 company: 火花思维
 email: 405059000@qq.com
 qq: //message/?uin=405059000&Site=&Menu-=yes

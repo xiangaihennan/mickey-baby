@@ -25,7 +25,7 @@ export default function Blog({ posts, initialDisplayPosts, pagination }) {
         posts={posts}
         initialDisplayPosts={initialDisplayPosts}
         pagination={pagination}
-        title="众里寻他千百度"
+        title="时间是个好东西"
       />
     </>
   )

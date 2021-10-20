@@ -1,5 +1,5 @@
 const siteMetadata = {
-  title: 'Human',
+  title: '😜😜😜😜😜😜😜😜😜😜😜😜😜😜😜😜😜😜😜😜😜',
   author: 'Macho Man',
   keywords: '刘泽奇，刘泽奇的博客，泽奇blog，快乐',
   headerTitle: 'keep happy',
