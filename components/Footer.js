@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="flex mb-3 space-x-4">
           <SocialIcon kind="mail" href={`mailto:${siteMetadata.email}`} size="6" />
           <SocialIcon kind="youtube" href={`tencent:${siteMetadata.qq}`} size="6" />
-          &nbsp; 抖音 b站。。。啥的
+          {/* &nbsp; 抖音 b站。。。啥的 */}
           {/* <SocialIcon kind="github" href={siteMetadata.github} size="6" />
           <SocialIcon kind="facebook" href={siteMetadata.facebook} size="6" />
           <SocialIcon kind="youtube" href={siteMetadata.youtube} size="6" />
@@ -20,8 +20,8 @@ export default function Footer() {
           <div>{siteMetadata.author}</div>
           <div>{` • `}</div>
           <div>{`© ${new Date().getFullYear()}`}</div>
-          <div>{` • `}</div>
-          <Link href="/">{siteMetadata.title}</Link>
+          {/* <div>{` • `}</div> */}
+          {/* <Link href="/">{siteMetadata.title}</Link> */}
         </div>
         <div className="mb-8 text-sm text-gray-500 dark:text-gray-400">
           <Link href="https://github.com/xiangaihennan/mickey-baby">------------------</Link>
