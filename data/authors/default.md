@@ -1,5 +1,5 @@
 ---
-name: Mickey—baby
+name: 阳光大猛男🤨
 avatar: /static/images/avatar.jpg
 occupation: FE
 company: 火花思维
@@ -10,4 +10,4 @@ qq: //message/?uin=405059000&Site=&Menu-=yes
 github: https://github.com
 ---
 
-简历模板？还是自我介绍？还是？？？
+省略三千字。。。
