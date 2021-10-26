@@ -4,7 +4,7 @@
 
 "@ahooksjs/use-request@^2.8.12":
   version "2.8.12"
-  resolved "https://registry.npmmirror.com/@ahooksjs/use-request/download/@ahooksjs/use-request-2.8.12.tgz?cache=0&sync_timestamp=1632485302366&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40ahooksjs%2Fuse-request%2Fdownload%2F%40ahooksjs%2Fuse-request-2.8.12.tgz#5234d5d7823d7759e87bd86f6ddbe40368090903"
+  resolved "https://registry.npmmirror.com/@ahooksjs/use-request/download/@ahooksjs/use-request-2.8.12.tgz?cache=0&sync_timestamp=1632485302366&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40ahooksjs%2Fuse-request%2Fdownload%2F%40ahooksjs%2Fuse-request-2.8.12.tgz"
   integrity sha1-UjTV14I9d1noe9hvbdvkA2gJCQM=
   dependencies:
     lodash.debounce "^4.0.8"
@@ -1014,6 +1014,16 @@
   resolved "https://registry.npmjs.org/@humanwhocodes/object-schema/-/object-schema-1.2.0.tgz"
   integrity sha512-wdppn25U8z/2yiaT6YGquE6X8sSv7hNMWSXYSSU1jGv/yd6XqjXgTDJ8KP4NgjTXfJ3GbRjeeb8RTV7a/VpM+w==
 
+"@iconify/icons-mdi@^1.0.46":
+  version "1.1.36"
+  resolved "https://registry.npmmirror.com/@iconify/icons-mdi/download/@iconify/icons-mdi-1.1.36.tgz#4d55a7e1b41ee1c87664e09c53928663d7036778"
+  integrity sha1-TVWn4bQe4ch2ZOCcU5KGY9cDZ3g=
+
+"@iconify/react@^1.1.3":
+  version "1.1.4"
+  resolved "https://registry.npmmirror.com/@iconify/react/download/@iconify/react-1.1.4.tgz#c778eddbaf196e55705d0bedff00d039dc1de8d3"
+  integrity sha1-x3jt268ZblVwXQvt/wDQOdwd6NM=
+
 "@mailchimp/mailchimp_marketing@^3.0.58":
   version "3.0.64"
   resolved "https://registry.npmjs.org/@mailchimp/mailchimp_marketing/-/mailchimp_marketing-3.0.64.tgz"
@@ -1080,7 +1090,7 @@
 
 "@next/swc-darwin-x64@11.1.2":
   version "11.1.2"
-  resolved "https://registry.npmmirror.com/@next/swc-darwin-x64/download/@next/swc-darwin-x64-11.1.2.tgz#792003989f560c00677b5daeff360b35b510db83"
+  resolved "https://registry.npmmirror.com/@next/swc-darwin-x64/download/@next/swc-darwin-x64-11.1.2.tgz?cache=0&sync_timestamp=1634786960840&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40next%2Fswc-darwin-x64%2Fdownload%2F%40next%2Fswc-darwin-x64-11.1.2.tgz#792003989f560c00677b5daeff360b35b510db83"
   integrity sha1-eSADmJ9WDABne12u/zYLNbUQ24M=
 
 "@next/swc-linux-x64-gnu@11.1.2":
@@ -1331,7 +1341,7 @@
 
 "@types/js-cookie@^2.2.6":
   version "2.2.7"
-  resolved "https://registry.npmmirror.com/@types/js-cookie/download/@types/js-cookie-2.2.7.tgz?cache=0&sync_timestamp=1633127579892&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40types%2Fjs-cookie%2Fdownload%2F%40types%2Fjs-cookie-2.2.7.tgz#226a9e31680835a6188e887f3988e60c04d3f6a3"
+  resolved "https://registry.npmmirror.com/@types/js-cookie/download/@types/js-cookie-2.2.7.tgz?cache=0&sync_timestamp=1633127579892&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40types%2Fjs-cookie%2Fdownload%2F%40types%2Fjs-cookie-2.2.7.tgz"
   integrity sha1-ImqeMWgINaYYjoh/OYjmDATT9qM=
 
 "@types/json-schema@^7.0.8":
@@ -1516,7 +1526,7 @@ aggregate-error@^3.0.0:
 
 ahooks@^2.10.11:
   version "2.10.11"
-  resolved "https://registry.npmmirror.com/ahooks/download/ahooks-2.10.11.tgz#167fb30909a63cdc3361e80fad5329fc498461fd"
+  resolved "https://registry.npmmirror.com/ahooks/download/ahooks-2.10.11.tgz"
   integrity sha1-Fn+zCQmmPNwzYegPrVMp/EmEYf0=
   dependencies:
     "@ahooksjs/use-request" "^2.8.12"
@@ -2518,7 +2528,7 @@ data-uri-to-buffer@3.0.1:
 
 dayjs@^1.9.1:
   version "1.10.7"
-  resolved "https://registry.nlark.com/dayjs/download/dayjs-1.10.7.tgz#2cf5f91add28116748440866a0a1d26f3a6ce468"
+  resolved "https://registry.nlark.com/dayjs/download/dayjs-1.10.7.tgz"
   integrity sha1-LPX5Gt0oEWdIRAhmoKHSbzps5Gg=
 
 deasync@^0.1.0:
@@ -4001,7 +4011,7 @@ internal-slot@^1.0.3:
 
 intersection-observer@^0.7.0:
   version "0.7.0"
-  resolved "https://registry.npm.taobao.org/intersection-observer/download/intersection-observer-0.7.0.tgz#ee16bee978db53516ead2f0a8154b09b400bbdc9"
+  resolved "https://registry.npm.taobao.org/intersection-observer/download/intersection-observer-0.7.0.tgz"
   integrity sha1-7ha+6XjbU1FurS8KgVSwm0ALvck=
 
 ipaddr.js@1.9.1:
@@ -4260,7 +4270,7 @@ jest-worker@27.0.0-next.5:
 
 js-cookie@^2.2.1:
   version "2.2.1"
-  resolved "https://registry.nlark.com/js-cookie/download/js-cookie-2.2.1.tgz?cache=0&sync_timestamp=1630493056723&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fjs-cookie%2Fdownload%2Fjs-cookie-2.2.1.tgz#69e106dc5d5806894562902aa5baec3744e9b2b8"
+  resolved "https://registry.nlark.com/js-cookie/download/js-cookie-2.2.1.tgz?cache=0&sync_timestamp=1630493056723&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fjs-cookie%2Fdownload%2Fjs-cookie-2.2.1.tgz"
   integrity sha1-aeEG3F1YBolFYpAqpbrsN0Tpsrg=
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
@@ -4496,7 +4506,7 @@ lodash.debounce@^4.0.8:
 
 lodash.isequal@^4.5.0:
   version "4.5.0"
-  resolved "https://registry.npm.taobao.org/lodash.isequal/download/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
+  resolved "https://registry.npm.taobao.org/lodash.isequal/download/lodash.isequal-4.5.0.tgz"
   integrity sha1-QVxEePK8wwEgwizhDtMib30+GOA=
 
 lodash.isplainobject@^4.0.6:
@@ -4516,7 +4526,7 @@ lodash.sortby@^4.7.0:
 
 lodash.throttle@^4.1.1:
   version "4.1.1"
-  resolved "https://registry.nlark.com/lodash.throttle/download/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
+  resolved "https://registry.nlark.com/lodash.throttle/download/lodash.throttle-4.1.1.tgz"
   integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
 
 lodash.topath@^4.5.2:
@@ -6226,6 +6236,15 @@ react-dom@17.0.2:
     object-assign "^4.1.1"
     scheduler "^0.20.2"
 
+react-h5-audio-player@^3.7.2:
+  version "3.7.2"
+  resolved "https://registry.npmmirror.com/react-h5-audio-player/download/react-h5-audio-player-3.7.2.tgz#7219e290fc0260796d1e60624b65c0b69547e1ef"
+  integrity sha1-chnikPwCYHltHmBiS2XAtpVH4e8=
+  dependencies:
+    "@babel/runtime" "^7.10.2"
+    "@iconify/icons-mdi" "^1.0.46"
+    "@iconify/react" "^1.1.3"
+
 react-is@17.0.2:
   version "17.0.2"
   resolved "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz"
@@ -6532,7 +6551,7 @@ require-from-string@^2.0.2:
 
 resize-observer-polyfill@^1.5.1:
   version "1.5.1"
-  resolved "https://registry.npm.taobao.org/resize-observer-polyfill/download/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
+  resolved "https://registry.npm.taobao.org/resize-observer-polyfill/download/resize-observer-polyfill-1.5.1.tgz"
   integrity sha1-DpAg3T0hAkRY1OvSfiPkAmmBBGQ=
 
 resolve-alpn@^1.0.0:
@@ -6666,7 +6685,7 @@ schema-utils@^3.0.0:
 
 screenfull@^5.0.0:
   version "5.1.0"
-  resolved "https://registry.npm.taobao.org/screenfull/download/screenfull-5.1.0.tgz?cache=0&sync_timestamp=1608796473351&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fscreenfull%2Fdownload%2Fscreenfull-5.1.0.tgz#85c13c70f4ead4c1b8a935c70010dfdcd2c0e5c8"
+  resolved "https://registry.npm.taobao.org/screenfull/download/screenfull-5.1.0.tgz?cache=0&sync_timestamp=1608796473351&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fscreenfull%2Fdownload%2Fscreenfull-5.1.0.tgz"
   integrity sha1-hcE8cPTq1MG4qTXHABDf3NLA5cg=
 
 section-matter@^1.0.0:

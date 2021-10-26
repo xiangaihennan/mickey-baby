@@ -3,20 +3,19 @@
 // import generateRss from '@/lib/generate-rss'
 // import { MDXLayoutRenderer } from '@/components/MDXComponents'
 // import { formatSlug, getAllFilesFrontMatter, getFileBySlug, getFiles } from '@/lib/mdx'
-
 // const DEFAULT_LAYOUT = 'PostLayout'
 
-// export async function getStaticPaths() {
-//   const posts = getFiles('blog')
-//   return {
-//     paths: posts.map((p) => ({
-//       params: {
-//         slug: formatSlug(p).split('/'),
-//       },
-//     })),
-//     fallback: false,
-//   }
-// }
+export async function getStaticPaths() {
+  // const posts = getFiles('blog')
+  return {
+    // paths: posts.map((p) => ({
+    //   params: {
+    //     slug: formatSlug(p).split('/'),
+    //   },
+    // })),
+    fallback: false,
+  }
+}
 
 // export async function getStaticProps({ params }) {
 //   const allPosts = await getAllFilesFrontMatter('blog')
@@ -46,9 +45,7 @@ export default function PostPage({ posts, initialDisplayPosts, pagination }) {
         controls
         src="http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/6ba371758602268010965231050/NHLSGMeaWiMA.mp4"
       >
-        <track kind="captions" src="subs_chi.srt" srcLang="zh" label="Chinese">
-          不支持
-        </track>
+        <track kind="captions" src="subs_chi.srt" srcLang="zh" label="Chinese"></track>
       </video>
       {/* <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
       <ListLayout
