@@ -1,5 +1,7 @@
 import fs from 'fs'
+import siteMetadata from '@/data/siteMetadata'
 import PageTitle from '@/components/PageTitle'
+import { PageSEO } from '@/components/SEO'
 import generateRss from '@/lib/generate-rss'
 import { MDXLayoutRenderer } from '@/components/MDXComponents'
 import { formatSlug, getAllFilesFrontMatter, getFileBySlug, getFiles } from '@/lib/mdx'
@@ -49,6 +51,7 @@ export default function HiphopPage({ videos, initialDisplayPosts, pagination }) 
   // const router = useRouter()
   return (
     <>
+      <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
       <div className="w-24 mb-8">巴拉巴拉</div>
       <video controls src={frontMatter.imgSrc}>
         <track kind="captions" src="subs_chi.srt" srcLang="zh" label="Chinese"></track>
