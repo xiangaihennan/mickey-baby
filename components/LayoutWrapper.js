@@ -7,7 +7,9 @@ import Footer from './Footer'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import AudioPlayer from 'react-h5-audio-player'
-
+const musicList = [
+  `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/ada0b7bb8602268011025581393/f0.m4a`,
+]
 const LayoutWrapper = ({ children }) => {
   return (
     <SectionContainer>
@@ -52,9 +54,10 @@ const LayoutWrapper = ({ children }) => {
           style={{
             border: 0,
             boxShadow: 'none',
+            backgroundColor: 'transparent',
           }}
-          // className={`bg-gradient-to-r from-teal to-blue-400`}
-          src="https://m804.music.126.net/20211026234816/2e0fd0a1a11d0493adcad7278c6e8959/jdyyaac/0e59/055e/045f/93e532218124ce8ed61a3565f061a5f8.m4a?authSecret=0000017cbd32ce820b7b0aa4637a0583"
+          className={`bg-transparent`}
+          src={musicList[0]}
           onPlay={(e) => console.log('onPlay', e)}
           // other props here
         />

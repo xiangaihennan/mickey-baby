@@ -43,6 +43,7 @@ export async function getStaticProps({ params }) {
 }
 
 export default function PostPage({ videos, initialDisplayPosts, pagination }) {
+  // TODO --------------
   console.log(videos, '/////////////////')
   // const router = useRouter()
   return (
@@ -50,7 +51,7 @@ export default function PostPage({ videos, initialDisplayPosts, pagination }) {
       <div className="w-24 mb-8">巴拉巴拉</div>
       <video
         controls
-        src="http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/6ba371758602268010965231050/NHLSGMeaWiMA.mp4"
+        src="http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/ada0b7bb8602268011025581393/f0.m4a"
       >
         <track kind="captions" src="subs_chi.srt" srcLang="zh" label="Chinese"></track>
       </video>

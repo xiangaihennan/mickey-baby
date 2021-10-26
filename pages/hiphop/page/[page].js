@@ -10,8 +10,6 @@ export async function getStaticPaths() {
   const paths = Array.from({ length: totalPages }, (_, i) => ({
     params: { page: (i + 1).toString() },
   }))
-  console.log(totalPosts, paths, 'lllllllllllllll')
-
   return {
     paths,
     fallback: false,
@@ -50,7 +48,7 @@ export default function PostPage({ videos, initialDisplayPosts, pagination }) {
         videos={videos}
         initialDisplayPosts={initialDisplayPosts}
         pagination={pagination}
-        title="111111111"
+        title="HipHop"
       />
     </>
   )

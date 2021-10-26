@@ -6,7 +6,6 @@ export const VIDEOS_PER_PAGE = 10
 
 export async function getStaticProps() {
   const videos = await getAllFilesFrontMatter('hiphop')
-  console.log(videos)
   const initialDisplayPosts = videos.slice(0, VIDEOS_PER_PAGE)
   const pagination = {
     currentPage: 1,

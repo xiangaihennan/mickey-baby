@@ -32,14 +32,9 @@ export default function ListLayout({ videos, title, initialDisplayPosts = [], pa
           </div>
         </div>
       </div>
-      {pagination &&
-        pagination.totalPages >
-          1(
-            <HiphopPagination
-              currentPage={pagination.currentPage}
-              totalPages={pagination.totalPages}
-            />
-          )}
+      {pagination && pagination.totalPages > 1 && (
+        <HiphopPagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />
+      )}
     </>
   )
 }
