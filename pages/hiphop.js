@@ -1,45 +1,30 @@
 import siteMetadata from '@/data/siteMetadata'
-import hiphops from '@/data/hiphopData'
-import VideoCard from '@/components/VideoCard'
 import { PageSEO } from '@/components/SEO'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
-export const POSTS_PER_PAGE = 5
+import ListHiphop from '@/layouts/ListHiphop'
+export const VIDEOS_PER_PAGE = 10
 
 export async function getStaticProps() {
-  const posts = await getAllFilesFrontMatter('hiphop')
-  const initialDisplayPosts = posts.slice(0, POSTS_PER_PAGE)
+  const videos = await getAllFilesFrontMatter('hiphop')
+  console.log(videos)
+  const initialDisplayPosts = videos.slice(0, VIDEOS_PER_PAGE)
   const pagination = {
     currentPage: 1,
-    totalPages: Math.ceil(posts.length / POSTS_PER_PAGE),
+    totalPages: Math.ceil(videos.length / VIDEOS_PER_PAGE),
   }
-  return { props: { initialDisplayPosts, posts, pagination } }
+  return { props: { initialDisplayPosts, videos, pagination } }
 }
-export default function HipHop() {
+export default function HipHop({ initialDisplayPosts, videos, pagination }) {
+  console.log(initialDisplayPosts, videos, pagination, 'ooooooooooooooooooooooo')
   return (
     <>
       <PageSEO title={`${siteMetadata.author}`} description={siteMetadata.description} />
-      <div className="divide-y divide-gray-200 dark:divide-gray-700">
-        <div className="pt-6 pb-8 space-y-2 md:space-y-5">
-          <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
-            hiphop～
-          </h1>
-          <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">happy-dance</p>
-        </div>
-        <div className="container py-12">
-          {/* /static/video/firstHiphop.mp4 */}
-          <div className="flex flex-wrap -m-4">
-            {hiphops.map((d) => (
-              <VideoCard
-                key={d.title}
-                title={d.title}
-                description={d.description}
-                imgSrc={d.imgSrc}
-                href={d.href}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
+      <ListHiphop
+        videos={videos}
+        initialDisplayPosts={initialDisplayPosts}
+        pagination={pagination}
+        title="重要的是开始。"
+      ></ListHiphop>
     </>
   )
 }

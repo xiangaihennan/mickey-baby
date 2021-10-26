@@ -17,12 +17,7 @@ export default function App({ Component, pageProps }) {
       </Head>
       <Analytics />
       {/* TODO */}
-      {/* <AudioPlayer
-        autoPlay
-        src="https://www.ytmp3.cn/down/75725.mp3"
-        onPlay={(e) => console.log('onPlay')}
-        // other props here
-      /> */}
+
       <LayoutWrapper>
         <Component {...pageProps} />
       </LayoutWrapper>

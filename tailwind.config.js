@@ -5,6 +5,7 @@ module.exports = {
   mode: 'jit',
   purge: ['./pages/**/*.js', './components/**/*.js', './layouts/**/*.js', './lib/**/*.js'],
   darkMode: 'class',
+  // important: '#__next',
   theme: {
     extend: {
       spacing: {
@@ -22,6 +23,7 @@ module.exports = {
       colors: {
         primary: colors.teal,
         gray: colors.trueGray,
+        teal: `#2dd4bf`,
       },
       typography: (theme) => ({
         DEFAULT: {
