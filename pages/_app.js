@@ -16,12 +16,13 @@ export default function App({ Component, pageProps }) {
         <meta content="width=device-width, initial-scale=1" name="viewport" />
       </Head>
       <Analytics />
-      <AudioPlayer
+      {/* TODO */}
+      {/* <AudioPlayer
         autoPlay
         src="https://www.ytmp3.cn/down/75725.mp3"
         onPlay={(e) => console.log('onPlay')}
         // other props here
-      />
+      /> */}
       <LayoutWrapper>
         <Component {...pageProps} />
       </LayoutWrapper>

@@ -7,7 +7,7 @@ import { formatSlug, getAllFilesFrontMatter, getFileBySlug, getFiles } from '@/l
 const DEFAULT_LAYOUT = 'PostLayout'
 
 export async function getStaticPaths() {
-  const posts = getFiles('blog')
+  const posts = getFiles('hiphop')
   console.log(posts, '[[[[[[[[[[[[[[[[[[')
   return {
     paths: posts.map((p) => ({
@@ -20,12 +20,12 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  console.log(params, '88889')
-  const allPosts = await getAllFilesFrontMatter('blog')
+  console.log(params, '888892222222222222222222')
+  const allPosts = await getAllFilesFrontMatter('hiphop')
   const postIndex = allPosts.findIndex((post) => formatSlug(post.slug) === params.slug.join('/'))
   const prev = allPosts[postIndex + 1] || null
   const next = allPosts[postIndex - 1] || null
-  const post = await getFileBySlug('blog', params.slug.join('/'))
+  const post = await getFileBySlug('hiphop', params.slug.join('/'))
   const authorList = post.frontMatter.authors || ['default']
   const authorPromise = authorList.map(async (author) => {
     const authorResults = await getFileBySlug('authors', [author])
@@ -40,30 +40,24 @@ export async function getStaticProps({ params }) {
   return { props: { post, authorDetails, prev, next } }
 }
 
-export default function Blog({ post, authorDetails, prev, next }) {
-  const { mdxSource, toc, frontMatter } = post
+export default function PostPage({ posts, initialDisplayPosts, pagination }) {
+  // const router = useRouter()
   return (
     <>
-      {frontMatter.draft !== true ? (
-        <MDXLayoutRenderer
-          layout={frontMatter.layout || DEFAULT_LAYOUT}
-          toc={toc}
-          mdxSource={mdxSource}
-          frontMatter={frontMatter}
-          authorDetails={authorDetails}
-          prev={prev}
-          next={next}
-        />
-      ) : (
-        <div className="mt-24 text-center">
-          <PageTitle>
-            Under Construction{' '}
-            <span role="img" aria-label="roadwork sign">
-              🚧
-            </span>
-          </PageTitle>
-        </div>
-      )}
+      <div className="w-24 mb-8">巴拉巴拉</div>
+      {/* <video
+        controls
+        src="http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/6ba371758602268010965231050/NHLSGMeaWiMA.mp4"
+      >
+        <track kind="captions" src="subs_chi.srt" srcLang="zh" label="Chinese"></track>
+      </video> */}
+      {/* <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
+      <ListLayout
+        posts={posts}
+        initialDisplayPosts={initialDisplayPosts}
+        pagination={pagination}
+        title="All Posts"
+      /> */}
     </>
   )
 }

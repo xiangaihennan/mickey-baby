@@ -17,7 +17,7 @@ const siteMetadata = {
   youtube: 'https://youtube.com',
   linkedin: 'https://www.linkedin.com',
   qq: `//message/?uin=405059000&Site=&Menu-=yes`,
-  locale: 'en-US',
+  locale: 'zh-cn',
   analytics: {
     // supports plausible, simpleAnalytics or googleAnalytics
     plausibleDataDomain: '', // e.g. tailwind-nextjs-starter-blog.vercel.app
