@@ -42,17 +42,15 @@ export async function getStaticProps({ params }) {
   return { props: { videos, authorDetails, prev, next } }
 }
 
-export default function PostPage({ videos, initialDisplayPosts, pagination }) {
+export default function HiphopPage({ videos, initialDisplayPosts, pagination }) {
   // TODO --------------
+  const { frontMatter } = videos
   console.log(videos, '/////////////////')
   // const router = useRouter()
   return (
     <>
       <div className="w-24 mb-8">巴拉巴拉</div>
-      <video
-        controls
-        src="http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/ada0b7bb8602268011025581393/f0.m4a"
-      >
+      <video controls src={frontMatter.imgSrc}>
         <track kind="captions" src="subs_chi.srt" srcLang="zh" label="Chinese"></track>
       </video>
       {/* <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
