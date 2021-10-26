@@ -1,9 +1,16 @@
 const hiphopData = [
   {
-    title: '入坑第一天',
-    description: `请欣赏手足无措的我`,
+    title: 'hiphop元素',
+    description: `元素练习～`,
+    imgSrc:
+      'http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/6ba371758602268010965231050/NHLSGMeaWiMA.mp4',
+    href: '/hiphop/element-collection',
+  },
+  {
+    title: 'element',
+    description: `元素练习～`,
     imgSrc: '/static/video/firstHiphop.mp4',
-    href: '##',
+    href: '/hiphop/element-collection',
   },
 ]
 

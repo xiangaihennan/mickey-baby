@@ -12,7 +12,7 @@ export default function HipHop() {
           <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
             hiphop～
           </h1>
-          <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">舞起来～</p>
+          <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">happy-dance</p>
         </div>
         <div className="container py-12">
           {/* /static/video/firstHiphop.mp4 */}

@@ -40,7 +40,7 @@ export async function getStaticProps(context) {
     },
   }
 }
-
+// 列表页面
 export default function PostPage({ posts, initialDisplayPosts, pagination }) {
   return (
     <>
@@ -49,7 +49,7 @@ export default function PostPage({ posts, initialDisplayPosts, pagination }) {
         posts={posts}
         initialDisplayPosts={initialDisplayPosts}
         pagination={pagination}
-        title="All Posts"
+        title="重要的是开始。"
       />
     </>
   )
