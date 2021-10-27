@@ -22,9 +22,9 @@ const LayoutWrapper = ({ children }) => {
       backgroundColor: 'transparent',
     },
     customControlsSection: [
-      <div key={mediaMetaData.musicList[curPlayerMusic]?.name}>
-        {mediaMetaData.musicList[curPlayerMusic]?.name}&nbsp;&nbsp;&nbsp;
-      </div>,
+      // <div key={mediaMetaData.musicList[curPlayerMusic]?.name}>
+      //   {mediaMetaData.musicList[curPlayerMusic]?.name}&nbsp;&nbsp;&nbsp;
+      // </div>,
       RHAP_UI.ADDITIONAL_CONTROLS,
       RHAP_UI.MAIN_CONTROLS,
       RHAP_UI.VOLUME_CONTROLS,
