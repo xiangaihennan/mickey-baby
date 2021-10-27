@@ -1,7 +1,7 @@
+const WindiCSS = require('windicss-webpack-plugin').default
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
-
 module.exports = withBundleAnalyzer({
   reactStrictMode: true,
   pageExtensions: ['js', 'jsx', 'md', 'mdx'],
@@ -36,7 +36,7 @@ module.exports = withBundleAnalyzer({
         'react-dom': 'preact/compat',
       })
     }
-
+    config.plugins.push(new WindiCSS())
     return config
   },
 })

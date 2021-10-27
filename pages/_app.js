@@ -1,10 +1,12 @@
-import '@/css/tailwind.css'
-import '@/css/prism.css'
+// import '@/css/tailwind.css'
+import 'windi.css'
+
+// import '@/css/prism.css'
 import 'react-h5-audio-player/lib/styles.css'
+// import 'windi.css'
 import Script from 'next/script'
 import { ThemeProvider } from 'next-themes'
 import Head from 'next/head'
-
 // import Analytics from '@/components/analytics'
 import LayoutWrapper from '@/components/LayoutWrapper'
 export default function App({ Component, pageProps }) {
