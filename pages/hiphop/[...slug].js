@@ -47,7 +47,7 @@ export async function getStaticProps({ params }) {
 export default function HiphopPage({ videos, initialDisplayPosts, pagination }) {
   // TODO --------------
   const { frontMatter } = videos
-  console.log(videos, '/////////////////')
+  console.log(videos, initialDisplayPosts, pagination, '/////////////////')
   // const router = useRouter()
   return (
     <>

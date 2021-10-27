@@ -9,6 +9,7 @@ import Analytics from '@/components/analytics'
 import LayoutWrapper from '@/components/LayoutWrapper'
 // import ReactAudioPlayer from 'react-audio-player'
 import AudioPlayer from 'react-h5-audio-player'
+
 export default function App({ Component, pageProps }) {
   return (
     <ThemeProvider attribute="class">

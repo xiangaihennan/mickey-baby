@@ -6,11 +6,43 @@ import SectionContainer from './SectionContainer'
 import Footer from './Footer'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
-import AudioPlayer from 'react-h5-audio-player'
-const musicList = [
-  `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/ada0b7bb8602268011025581393/f0.m4a`,
-]
+import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player'
+import mediaMetaData from '@/data/mediaMetaData'
+import { useState } from 'react'
+
 const LayoutWrapper = ({ children }) => {
+  const [curPlayerMusic, setCurPlayerMusic] = useState(0)
+  console.log(curPlayerMusic, '99999999')
+  const viedeoConfig = {
+    autoPlay: true,
+    // layout: 'horizontal',
+    style: {
+      border: 0,
+      boxShadow: 'none',
+      backgroundColor: 'transparent',
+    },
+    customControlsSection: [
+      <div key={mediaMetaData.musicList[curPlayerMusic]?.name}>
+        {mediaMetaData.musicList[curPlayerMusic]?.name}&nbsp;&nbsp;&nbsp;
+      </div>,
+      RHAP_UI.ADDITIONAL_CONTROLS,
+      RHAP_UI.MAIN_CONTROLS,
+      RHAP_UI.VOLUME_CONTROLS,
+    ],
+    loop: true,
+    showSkipControls: true,
+    className: `bg-transparent`,
+    src: mediaMetaData.musicList[curPlayerMusic]?.url,
+    onPlay: (e) => {
+      console.log('onPlay', e)
+    },
+    onClickPrevious: (ev) => {
+      setCurPlayerMusic((x) => (x > 0 ? --x : x))
+    },
+    onClickNext: (ev) => {
+      setCurPlayerMusic((x) => (x < mediaMetaData.musicList.length - 1 ? ++x : x))
+    },
+  }
   return (
     <SectionContainer>
       <div className="flex flex-col justify-between h-screen">
@@ -49,18 +81,7 @@ const LayoutWrapper = ({ children }) => {
           </div>
         </header>
         {/* <div> */}
-        <AudioPlayer
-          autoPlay={true}
-          style={{
-            border: 0,
-            boxShadow: 'none',
-            backgroundColor: 'transparent',
-          }}
-          className={`bg-transparent`}
-          src={musicList[0]}
-          onPlay={(e) => console.log('onPlay', e)}
-          // other props here
-        />
+        <AudioPlayer {...viedeoConfig}></AudioPlayer>
         {/* </div> */}
         <main className="mb-auto">{children}</main>
         <Footer />
