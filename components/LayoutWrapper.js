@@ -80,9 +80,7 @@ const LayoutWrapper = ({ children }) => {
             <MobileNav />
           </div>
         </header>
-        {/* <div> */}
         <AudioPlayer {...viedeoConfig}></AudioPlayer>
-        {/* </div> */}
         <main className="mb-auto">{children}</main>
         <Footer />
       </div>

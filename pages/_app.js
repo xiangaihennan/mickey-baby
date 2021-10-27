@@ -17,13 +17,9 @@ export default function App({ Component, pageProps }) {
         <meta content="width=device-width, initial-scale=1" name="viewport" />
       </Head>
       <Analytics />
-      {/* TODO */}
-
       <LayoutWrapper>
         <Component {...pageProps} />
       </LayoutWrapper>
-
-      {/* <ReactAudioPlayer src="https://www.ytmp3.cn/down/75725.mp3" autoPlay controls /> */}
     </ThemeProvider>
   )
 }
