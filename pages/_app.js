@@ -1,9 +1,7 @@
 // import '@/css/tailwind.css'
 import 'windi.css'
-
-// import '@/css/prism.css'
+import '@/css/prism.css'
 import 'react-h5-audio-player/lib/styles.css'
-// import 'windi.css'
 import Script from 'next/script'
 import { ThemeProvider } from 'next-themes'
 import Head from 'next/head'

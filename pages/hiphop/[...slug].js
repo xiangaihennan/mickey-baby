@@ -5,12 +5,12 @@ import { PageSEO } from '@/components/SEO'
 import generateRss from '@/lib/generate-rss'
 import { MDXLayoutRenderer } from '@/components/MDXComponents'
 import { formatSlug, getAllFilesFrontMatter, getFileBySlug, getFiles } from '@/lib/mdx'
+import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 
 const DEFAULT_LAYOUT = 'PostLayout'
 
 export async function getStaticPaths() {
   const videos = getFiles('hiphop')
-  console.log(videos, '[[[[[[[[[[[[[[[[[[')
   return {
     paths: videos.map((p) => ({
       params: {
@@ -52,17 +52,12 @@ export default function HiphopPage({ videos, initialDisplayPosts, pagination }) 
   return (
     <>
       <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
+      <ScrollTopAndComment />
       <div className="w-24 mb-8">巴拉巴拉</div>
       <video controls src={frontMatter.imgSrc}>
         <track kind="captions" src="subs_chi.srt" srcLang="zh" label="Chinese"></track>
       </video>
-      {/* <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
-      <ListLayout
-        videos={videos}
-        initialDisplayPosts={initialDisplayPosts}
-        pagination={pagination}
-        title="All Posts"
-      /> */}
+      {/* TODO Comments */}
     </>
   )
 }

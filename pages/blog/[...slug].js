@@ -5,10 +5,8 @@ import { MDXLayoutRenderer } from '@/components/MDXComponents'
 import { formatSlug, getAllFilesFrontMatter, getFileBySlug, getFiles } from '@/lib/mdx'
 
 const DEFAULT_LAYOUT = 'PostLayout'
-
 export async function getStaticPaths() {
   const posts = getFiles('blog')
-  console.log(posts, '[[[[[[[[[[[[[[[[[[')
   return {
     paths: posts.map((p) => ({
       params: {
@@ -18,9 +16,7 @@ export async function getStaticPaths() {
     fallback: false,
   }
 }
-
 export async function getStaticProps({ params }) {
-  console.log(params, '88889')
   const allPosts = await getAllFilesFrontMatter('blog')
   const postIndex = allPosts.findIndex((post) => formatSlug(post.slug) === params.slug.join('/'))
   const prev = allPosts[postIndex + 1] || null
