@@ -6,8 +6,8 @@ import generateRss from '@/lib/generate-rss'
 import { MDXLayoutRenderer } from '@/components/MDXComponents'
 import { formatSlug, getAllFilesFrontMatter, getFileBySlug, getFiles } from '@/lib/mdx'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
-
-const DEFAULT_LAYOUT = 'PostLayout'
+import { useRouter } from 'next/router'
+const DEFAULT_LAYOUT = 'HiphopLayout'
 
 export async function getStaticPaths() {
   const videos = getFiles('hiphop')
@@ -44,20 +44,32 @@ export async function getStaticProps({ params }) {
   return { props: { videos, authorDetails, prev, next } }
 }
 
-export default function HiphopPage({ videos, initialDisplayPosts, pagination }) {
+export default function HiphopPage({ videos, authorDetails, prev, next }) {
   // TODO --------------
-  const { frontMatter } = videos
-  console.log(videos, initialDisplayPosts, pagination, '/////////////////')
-  // const router = useRouter()
+  const { mdxSource, toc, frontMatter } = videos
+  console.log(frontMatter, '999999999999999999999')
   return (
     <>
-      <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
-      <ScrollTopAndComment />
-      <div className="w-24 mb-8">巴拉巴拉</div>
-      <video controls src={frontMatter.imgSrc}>
-        <track kind="captions" src="subs_chi.srt" srcLang="zh" label="Chinese"></track>
-      </video>
-      {/* TODO Comments */}
+      {frontMatter.draft !== true ? (
+        <MDXLayoutRenderer
+          layout={frontMatter.layout || DEFAULT_LAYOUT}
+          toc={toc}
+          mdxSource={mdxSource}
+          frontMatter={frontMatter}
+          authorDetails={authorDetails}
+          prev={prev}
+          next={next}
+        />
+      ) : (
+        <div className="mt-24 text-center">
+          <PageTitle>
+            Under Construction{' '}
+            <span role="img" aria-label="roadwork sign">
+              🚧
+            </span>
+          </PageTitle>
+        </div>
+      )}
     </>
   )
 }
