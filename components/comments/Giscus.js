@@ -48,7 +48,7 @@ const Giscus = ({ mapping }) => {
 
   return (
     <div className="pt-6 pb-6 text-center text-gray-700 dark:text-gray-300">
-      {enableLoadComments && <button onClick={LoadComments}>click me！加载评论</button>}
+      {enableLoadComments && <button onClick={LoadComments}>留言板...</button>}
       <div className="giscus" id={COMMENTS_ID} />
     </div>
   )
