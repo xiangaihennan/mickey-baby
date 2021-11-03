@@ -36,10 +36,10 @@ const LayoutWrapper = ({ children }) => {
       console.log('onPlay', e)
     },
     onClickPrevious: (ev) => {
-      setCurPlayerMusic((x) => (x > 0 ? --x : x))
+      setCurPlayerMusic((x) => (x > 0 ? --x : mediaMetaData.musicList.length - 1))
     },
     onClickNext: (ev) => {
-      setCurPlayerMusic((x) => (x < mediaMetaData.musicList.length - 1 ? ++x : x))
+      setCurPlayerMusic((x) => (x < mediaMetaData.musicList.length - 1 ? ++x : 0))
     },
   }
   return (
