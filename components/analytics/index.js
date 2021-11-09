@@ -1,7 +1,7 @@
 import GA from './GoogleAnalytics'
 import Plausible from './Plausible'
 import SimpleAnalytics from './SimpleAnalytics'
-import BaiduAnalytics from './SimpleAnalytics'
+import BaiduAnalytics from './BaiduAnalytics'
 import siteMetadata from '@/data/siteMetadata'
 
 const isProduction = process.env.NODE_ENV === 'production'
