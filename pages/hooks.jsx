@@ -19,7 +19,7 @@ export default function Hooks() {
     console.log(`useCallback`)
   }, [])
   useEffect((params) => {
-    console.log(`useEffect`)
+    console.log(`useEffect1111111`)
   }, [])
   return (
     <div>
