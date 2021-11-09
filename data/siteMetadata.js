@@ -23,6 +23,7 @@ const siteMetadata = {
     plausibleDataDomain: 'mickey-baby.vercel.app', // e.g. tailwind-nextjs-starter-blog.vercel.app
     simpleAnalytics: false, // true or false
     googleAnalyticsId: '', // e.g. UA-000000-2 or G-XXXXXXX
+    baiduAnalytics: `mickey-baby.vercel.app`,
   },
   newsletter: {
     // supports mailchimp, buttondown, convertkit
