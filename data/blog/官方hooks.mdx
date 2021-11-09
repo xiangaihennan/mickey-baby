@@ -1,0 +1,65 @@
+---
+title: 官方hooks理解。
+date: '2021-11-09'
+tags: ['react', 'hooks']
+draft: false
+summary: 'hooks学习'
+---
+
+话不多说，先上代码！
+
+```javescript代码
+import { useToggle } from '@/hooks/useToggle/index.js'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
+export default function Hooks() {
+  const [state, { toggle }] = useToggle('123', '456')
+  const hooksTest = () => {
+    toggle()
+  }
+  /**
+   * 类似vue computed  。
+   * 缓存的是值 即使在jsx渲染模版中调用也不会执行。
+   * 下面的例子相当于useCallback 但组件内部state更新（非deps情况） 函数不会重新执行
+   */
+  const memo = useMemo((params) => {
+    console.log(`useMemo`,''状态更新在模版中使用不会被调用')
+    return () => '666666666666666'
+  }, [])
+  // 只缓存函数 如果在jsx渲染模版中调用 依然会执行
+  const callback = useCallback((params) => {
+    console.log(`useCallback`,'状态更新在模版中使用会被调用')
+  }, [])
+  useEffect((params) => {
+    console.log(`useEffect`)
+  }, [])
+  return (
+    <div>
+      <button onClick={hooksTest}>修改state状态{state}</button>
+      <div>{memo()}</div>
+      <div>{callback()}</div>
+    </div>
+  )
+}
+
+```
+
+---
+
+##总结：
+
+### 三个 hooksAPI 共同点：
+
+都是通过 deps 的变化 来更新回调函数；
+
+### useMemo 和 useCallback
+
+初始渲染执行顺序依次为 useMemo -> useCallback -> useEffect
+useCallback(fn, deps) 其实相当于 useMemo(() => fn, deps)，所以说：使用 useMemo 完全可以实现 useCallback。
+
+### 不同点
+
+useEffect 就不多说了，相当于函数式编程通往命令式的一个通道-->即 class 对应的生命周期概念。
+useMemo 可以实现 useCallback 只要 deps 依赖不变函数就不会执行
+useCallback 如果在模版中调用缓存的函数依然会执行
+
+---
