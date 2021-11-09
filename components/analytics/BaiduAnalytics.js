@@ -5,7 +5,7 @@ import siteMetadata from '@/data/siteMetadata'
 const GAScript = () => {
   return (
     <>
-      <Script strategy="lazyOnload" id="ga-script">
+      <Script strategy="lazyOnload" id="baidu-script">
         {`
             var _hmt = _hmt || [];
             (function() {
