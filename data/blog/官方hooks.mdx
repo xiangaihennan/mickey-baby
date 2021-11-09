@@ -6,7 +6,7 @@ draft: false
 summary: 'hooks学习'
 ---
 
-话不多说，先上代码！
+话不多说，直接上代码！
 
 ```javescript代码
 import { useToggle } from '@/hooks/useToggle/index.js'
@@ -43,10 +43,6 @@ export default function Hooks() {
 
 ```
 
----
-
-##总结：
-
 ### 三个 hooksAPI 共同点：
 
 都是通过 deps 的变化 来更新回调函数；
@@ -60,6 +56,6 @@ useCallback(fn, deps) 其实相当于 useMemo(() => fn, deps)，所以说：使�
 
 useEffect 就不多说了，相当于函数式编程通往命令式的一个通道-->即 class 对应的生命周期概念。
 useMemo 可以实现 useCallback 只要 deps 依赖不变函数就不会执行
-useCallback 如果在模版中调用缓存的函数依然会执行
+useCallback 如果在模版中调用缓存的函数依然会执行。
 
----
+## 使用场景：在组件状态更新时有大量复杂计算时 把对应函数缓存起来避免每次更新 state 都重复执行
