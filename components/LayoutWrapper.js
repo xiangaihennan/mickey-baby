@@ -13,7 +13,7 @@ import { useState } from 'react'
 const LayoutWrapper = ({ children }) => {
   const [curPlayerMusic, setCurPlayerMusic] = useState(0)
   const viedeoConfig = {
-    autoPlay: true,
+    autoPlay: false,
     // layout: 'horizontal',
     style: {
       border: 0,

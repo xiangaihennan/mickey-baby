@@ -1,5 +1,5 @@
 ---
-title: 官方hooks理解。
+title: hooks学习。
 date: '2021-11-09'
 tags: ['react', 'hooks']
 draft: false
@@ -52,9 +52,11 @@ export default function Hooks() {
 初始渲染执行顺序依次为 useMemo -> useCallback -> useEffect
 useCallback(fn, deps) 其实相当于 useMemo(() => fn, deps)，所以说：使用 useMemo 完全可以实现 useCallback。
 
+#### tips：官方都说了 memo 可以代替 callback 那还用他干啥，？？？（写多了都乱套）
+
 ### 不同点
 
-useEffect 就不多说了，相当于函数式编程通往命令式的一个通道-->即 class 对应的生命周期概念。
+useEffect 就不多说了，函数式编程通往命令式的一个通道-->即 class 对应的生命周期概念。
 useMemo 可以实现 useCallback 只要 deps 依赖不变函数就不会执行。
 useCallback 如果在模版中调用缓存的函数依然会执行。
 
