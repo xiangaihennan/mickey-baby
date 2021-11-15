@@ -26,7 +26,7 @@ export default function ListLayout({ videos, title, initialDisplayPosts = [], pa
                 key={d.date}
                 title={d.title}
                 description={d.description}
-                imgSrc={d.imgSrc}
+                imgSrc={d.mediaLink}
                 href={`/hiphop/${d.slug}`}
               />
             ))}

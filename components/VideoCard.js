@@ -7,12 +7,12 @@ const Card = ({ title, description, imgSrc, href }) => (
       {href ? (
         <Link href={href} aria-label={`Link to ${title}`}>
           <video width={544} height={306} src={imgSrc}>
-            <track src="cn_track.vtt" srcLang="zh" default kind="captions" label="欢迎你"></track>
+            <track src={imgSrc} srcLang="zh" default kind="captions" label="欢迎你"></track>
           </video>
         </Link>
       ) : (
         <video width={544} height={306} src={imgSrc}>
-          <track src="cn_track.vtt" srcLang="zh" default kind="captions" label="欢迎你"></track>
+          <track src={imgSrc} srcLang="zh" default kind="captions" label="欢迎你"></track>
         </video>
         // <Image
         //   alt={title}
