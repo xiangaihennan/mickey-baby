@@ -3,10 +3,24 @@ title: react响应式状态。
 date: '2021-11-15'
 tags: ['react', 'hooks']
 draft: false
-summary: 'useReactive'
+summary: 'react hooks'
 ---
 
-上马！
+前置相关知识：
+[weakMap](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/WeakMap 'weakMap')
+
+```
+
+const wm = new WeakMap();
+let key = {} // 堆内存生成一个对象 暂时叫 obj1
+wm.set(key, 1);
+key = null;
+当我们设置 wm.set(key, 1) 时， wm 对 key 所引用的对象的是弱引用
+然后把key设置为null，obj1就只有wm的弱引用关系，垃圾回收再次检查到会执行回收机制。
+
+```
+
+上码
 
 ```
 // k:v 原对象:代理过的对象  弱引用
