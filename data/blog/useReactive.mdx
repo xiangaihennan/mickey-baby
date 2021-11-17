@@ -1,7 +1,7 @@
 ---
-title: react响应式状态。
-date: '2021-11-15'
-tags: ['react', 'hooks']
+title: useReactive。
+date: '2021-11-17'
+tags: ['react', 'hooks', 'ahooks源码']
 draft: false
 summary: 'react hooks'
 ---
@@ -10,77 +10,129 @@ summary: 'react hooks'
 [weakMap](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/WeakMap 'weakMap')
 
 ```
-
+// WeakMap的键只能是对象
 const wm = new WeakMap();
 let key = {} // 堆内存生成一个对象 暂时叫 obj1
 wm.set(key, 1);
 key = null;
 当我们设置 wm.set(key, 1) 时， wm 对 key 所引用的对象的是弱引用
 然后把key设置为null，obj1就只有wm的弱引用关系，垃圾回收再次检查到会执行回收机制。
-
 ```
+
+弱引用：
+
+> 垃圾回收机制不考虑对该对象的引用。
+
+也就是说，如果其他对象都不再引用该对象，那么垃圾回收机制会自动回收该对象所占用的内存，不考虑该对象是否还在该弱引用的结构中。
+
+注意： 弱引用的对象不可遍历！
 
 上码
 
 ```
-// k:v 原对象:代理过的对象  弱引用
-const proxyMap = new WeakMap();
-// k:v 代理过的对象:原对象  弱引用
-const rawMap = new WeakMap();
+import { useRef } from 'react'
+import { useCreation } from '../useCreation'
+import { useUpdate } from '../useUpdate'
+// k:v 原对象:代理过的对象   存储代理过的对象
+const proxyMap = new WeakMap()
+// k:v 代理过的对象:原对象   存储原对象
+const rawMap = new WeakMap()
 
-function isObject(val: Record<string, any>): boolean {
-  return typeof val === 'object' && val !== null;
+function isObject(val) {
+  return typeof val === 'object' && val !== null
 }
-//
-function observer<T extends Record<string, any>>(initialVal: T, cb: () => void): T {
-  const existingProxy = proxyMap.get(initialVal);
+// 为目标对象添加代理
+function observer(initialVal, cb) {
+  const existingProxy = proxyMap.get(initialVal)
 
   // 添加缓存 防止重新构建proxy
   if (existingProxy) {
-    return existingProxy;
+    return existingProxy
   }
 
   // 防止代理已经代理过的对象
-  // https://github.com/alibaba/hooks/issues/839
   if (rawMap.has(initialVal)) {
-    return initialVal;
+    return initialVal
   }
-
-  const proxy = new Proxy<T>(initialVal, {
+  // 开始只设置当前传入对象为代理对象
+  const proxy = new Proxy(initialVal, {
     get(target, key, receiver) {
-      const res = Reflect.get(target, key, receiver);
-      return isObject(res) ? observer(res, cb) : Reflect.get(target, key);
+      // 获取值时 把访问路径的所有对象都代理为proxy对象   ！！这个位置思想比较关键
+      const res = Reflect.get(target, key, receiver)
+      return isObject(res) ? observer(res, cb) : Reflect.get(target, key)
     },
     set(target, key, val) {
-      const ret = Reflect.set(target, key, val);
-      cb();
-      return ret;
+      const ret = Reflect.set(target, key, val)
+      cb()
+      return ret
     },
     deleteProperty(target, key) {
-      const ret = Reflect.deleteProperty(target, key);
-      cb();
-      return ret;
+      const ret = Reflect.deleteProperty(target, key)
+      cb()
+      return ret
     },
-  });
+  })
+  // 把代理对象和原对象 缓存起来 防止重复创建
+  proxyMap.set(initialVal, proxy)
+  rawMap.set(proxy, initialVal)
 
-  proxyMap.set(initialVal, proxy);
-  rawMap.set(proxy, initialVal);
-
-  return proxy;
+  return proxy
 }
-
-function useReactive<S extends Record<string, any>>(initialState: S): S {
-  const update = useUpdate();
-  const stateRef = useRef<S>(initialState);
-
+// 接收被代理的目标对象
+export function useReactive(initialState) {
+  // 触发渲染更新
+  const update = useUpdate()
+  // 获取初始需要代理的数据
+  const stateRef = useRef(initialState)
+  // 缓存代理对象
   const state = useCreation(() => {
     return observer(stateRef.current, () => {
-      update();
-    });
-  }, []);
+      update()
+    })
+  }, [])
 
-  return state;
+  return state
 }
 
-export default useReactive;
 ```
+
+收获蛮多 算是 proxy 比较好的实践应用了。
+
+## 还有个 Reflect 的遗留问题。
+
+> 使用 Proxy 的一个难点是 this 绑定。我们希望任何方法都绑定到这个 Proxy，而不是目标对象，这样我们也可以拦截它们。值得庆幸的是，ES6 引入了另一个名为 Reflect 的新特性，它允许我们以最小的代价消除了这个问题：
+
+```
+下面两种输出都是 proxy 对象 vue 官网下面那个说明是啥意思？？？ 我不李姐！！
+const dinner = {
+  meal: 'tacos',
+  fn:function(){
+      console.log(this)
+    }
+}
+const handler = {
+  get(target, property, receiver) {
+    return Reflect.get(...arguments)
+  }
+}
+const proxy = new Proxy(dinner, handler)
+proxy.fn()  // 输出 Proxy {meal: 'tacos', fn: ƒ}
+const dinner = {
+  meal: 'tacos',
+  fn:function(){
+    console.log(this)
+    }
+}
+
+const handler = {
+  get(target, property, receiver) {
+    return target[property]
+  }
+}
+
+const proxy = new Proxy(dinner, handler)
+
+proxy.fn() // 输出 Proxy {meal: 'tacos', fn: ƒ}
+```
+
+> [Vue 响应式链接](https://v3.cn.vuejs.org/guide/reactivity.html#vue-%E5%A6%82%E4%BD%95%E8%B7%9F%E8%B8%AA%E5%8F%98%E5%8C%96)

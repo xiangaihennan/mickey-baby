@@ -1,4 +1,4 @@
-const { useMemo, useRef } = require('react')
+import { useMemo, useRef } from 'react'
 
 // 专治帕金森～
 export const useLockFn = (fn) => {
