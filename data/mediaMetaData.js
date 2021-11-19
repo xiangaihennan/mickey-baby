@@ -1,6 +1,10 @@
 const mediaData = {
   musicList: [
     {
+      name: `a night`,
+      url: `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/c5234e0b387702291664116052/f0.mp3`,
+    },
+    {
       name: `undaground Rappa`,
       url: `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/20585f92387702291512409764/f0.mp3`,
     },

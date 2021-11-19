@@ -1,5 +1,5 @@
 ---
-name: 阳光大猛男🤨
+name: 捕鱼达人🤨
 avatar: /static/images/avatar.jpg
 occupation: FE
 company: 火花思维
