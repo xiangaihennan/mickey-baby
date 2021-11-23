@@ -3,12 +3,12 @@ title: js call的实现
 date: '2021-10-22'
 tags: ['js']
 draft: false
-summary: '工作小帮手'
+summary: '手写call'
 ---
 
 代码很少记得思路就好 🤨
 
-很简单，其实就是把调用函数当作传入目标对象的属性去调用一下 顺带把参数传入～
+很简单，利用函数会继承 Function 对象的特性 把调用函数当作传入目标对象的属性去调用一下 顺带把参数传入～
 
 ```
 // Function构造函数写入自定义_call方法
@@ -18,14 +18,12 @@ summary: '工作小帮手'
    * @param  {...any} otherParams 参数
    */
   Function.prototype._call = function (obj,...otherParams) {
-    // 拷贝传入对象 避免影响原对象属性
+    // 拷贝传入对象 避免传入对象
     const { ...copyObj } = obj
     // 把当前调用的函数 拿出来 作为传入对象的属性方法
     copyObj.fn = this
     // 调用当前方法 并传入参数
     copyObj.fn(...otherParams)
-    // 删除掉函数
-    delete obj.fn
   }
   const obj = {
     name: 5666,
