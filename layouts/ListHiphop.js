@@ -7,7 +7,7 @@ import formatDate from '@/lib/utils/formatDate'
 import VideoCard from '@/components/VideoCard'
 
 export default function ListLayout({ videos, title, initialDisplayPosts = [], pagination }) {
-  console.log(videos, '------------')
+  // console.log(videos, '------------')
   // TODO 滚动功能 上下页
   return (
     <>
