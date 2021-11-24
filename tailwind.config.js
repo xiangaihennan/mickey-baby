@@ -1,12 +1,7 @@
-import { defineConfig } from 'windicss/helpers'
-const defaultTheme = require('windicss/defaultTheme')
-const colors = require('windicss/colors')
+const defaultTheme = require('tailwindcss/defaultTheme')
+const colors = require('tailwindcss/colors')
 
-export default defineConfig({
-  extract: {
-    include: ['**/*.{jsx,css,js}'],
-    exclude: ['node_modules', '.git', '.next'],
-  },
+module.exports = {
   mode: 'jit',
   purge: ['./pages/**/*.js', './components/**/*.js', './layouts/**/*.js', './lib/**/*.js'],
   darkMode: 'class',
@@ -158,5 +153,5 @@ export default defineConfig({
   variants: {
     typography: ['dark'],
   },
-  plugins: [require('windicss/plugin/forms'), require('windicss/plugin/typography')],
-})
+  plugins: [],
+}
