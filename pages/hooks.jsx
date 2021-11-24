@@ -22,6 +22,7 @@ export default function Hooks() {
   }
   return (
     <>
+      <div className="box-content h-32 w-32 p-4 border-4 bg-indigo-800"></div>
       <p>
         Submit count: {count}---
         {state.kk.ff}
