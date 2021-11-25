@@ -6,12 +6,12 @@ const Card = ({ title, description, imgSrc, href }) => (
     <div className="h-full overflow-hidden border-2 border-gray-200 rounded-md border-opacity-60 dark:border-gray-700">
       {href ? (
         <Link href={href} aria-label={`Link to ${title}`}>
-          <video className="h-77 w-123" src={imgSrc}>
+          <video className="w-[492px] h-[280px]" src={imgSrc}>
             <track src={imgSrc} srcLang="zh" default kind="captions" label="欢迎你"></track>
           </video>
         </Link>
       ) : (
-        <video className="h-77 w-123" src={imgSrc}>
+        <video className="w-[492px] h-[280px]" src={imgSrc}>
           <track src={imgSrc} srcLang="zh" default kind="captions" label="欢迎你"></track>
         </video>
         // <Image
