@@ -14,7 +14,7 @@ export async function getStaticProps() {
   return { props: { initialDisplayPosts, videos, pagination } }
 }
 export default function HipHop({ initialDisplayPosts, videos, pagination }) {
-  console.log(initialDisplayPosts, videos, pagination, 'ooooooooooooooooooooooo')
+  // console.log(initialDisplayPosts, videos, pagination, 'ooooooooooooooooooooooo')
   return (
     <>
       <PageSEO title={`${siteMetadata.author}`} description={siteMetadata.description} />

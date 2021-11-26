@@ -1,10 +1,11 @@
+import { useEffect, useMemo, useState } from 'react'
 import Image from './Image'
 import Link from './Link'
 
 const Card = ({ title, description, imgSrc, href }) => {
   return (
     <div
-      className={`p-4 md:w-1/2 md transform even:rotate-5 odd:-rotate-5 hover:z-10000 hover:scale-120 hover:border-transparent hover:shadow-lg`}
+      className={`p-4 md:w-1/2 md transform even:rotate-3 odd:-rotate-3 hover:z-10000 hover:scale-[1.1] hover:border-transparent hover:shadow-lg`}
       style={{ maxWidth: '544px' }}
     >
       <div className="h-full overflow-hidden border-2 border-gray-200 rounded-md border-opacity-60 dark:border-gray-700">

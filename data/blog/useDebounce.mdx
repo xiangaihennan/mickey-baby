@@ -1,0 +1,24 @@
+---
+title: 防抖hooks
+date: '2021-11-26'
+tags: ['react', 'hooks']
+draft: false
+summary: '防抖函数'
+---
+
+```
+import { useCallback } from 'react'
+export function useDebounce(fn, delay = 1000) {
+  let timer = null
+  function reBack() {
+    const ctx = this
+    const args = arguments
+    clearInterval(timer)
+    timer = setTimeout(() => {
+      fn.apply(ctx, args)
+    }, delay)
+  }
+  return useCallback(reBack, [fn])
+}
+
+```

@@ -1,7 +1,7 @@
 ---
 title: hooks学习。
 date: '2021-11-09'
-tags: ['react', 'hooks', 'ahooks源码']
+tags: ['react', 'hooks']
 draft: false
 summary: 'hooks学习'
 ---
@@ -45,19 +45,22 @@ export default function Hooks() {
 
 ### 三个 hooksAPI 共同点：
 
+<br />
 都是通过 deps 的变化 来更新或执行回调函数；
-
+<br />
 ### useMemo 和 useCallback
-
-初始渲染执行顺序依次为 useMemo -> useCallback -> useEffect
-useCallback(fn, deps) 其实相当于 useMemo(() => fn, deps)，所以说：使用 useMemo 完全可以实现 useCallback。
-
+<br />
+初始渲染执行顺序依次为 useMemo -> useCallback -> useEffect useCallback(fn, deps) 其实相当于 useMemo(()
+=> fn, deps)，所以说：使用 useMemo 完全可以实现 useCallback。
+<br />
 #### tips：官方都说了 memo 可以代替 callback 那还用他干啥，？？？（写多了都乱套）
-
-### 不同点
-
+<br />
+### 不同点:
+<br />
 useEffect 就不多说了，函数式编程通往命令式的一个通道-->即 class 对应的生命周期概念。
+<br />
 useMemo 可以实现 useCallback 只要 deps 依赖不变函数就不会执行。
+<br />
 useCallback 如果在模版中调用缓存的函数依然会执行。
-
+<br />
 ## 使用场景：在组件状态更新时有大量复杂计算时 把对应函数缓存起来避免每次更新 state 都重复执行

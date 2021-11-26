@@ -1,7 +1,7 @@
 ---
 title: useReactive。
 date: '2021-11-17'
-tags: ['react', 'hooks', 'ahooks源码']
+tags: ['react', 'hooks']
 draft: false
 summary: 'react hooks'
 ---
@@ -24,10 +24,11 @@ key = null;
 
 > 垃圾回收机制不考虑对该对象的引用。
 
+<br />
 也就是说，如果其他对象都不再引用该对象，那么垃圾回收机制会自动回收该对象所占用的内存，不考虑该对象是否还在该弱引用的结构中。
-
+<br />
 注意： 弱引用的对象不可遍历！
-
+<br />
 上码
 
 ```
