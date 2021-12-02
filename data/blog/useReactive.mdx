@@ -10,28 +10,27 @@ summary: 'react hooks'
 [weakMap](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/WeakMap 'weakMap')
 [Proxy](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy 'Proxy')
 
-```
-// WeakMap的键只能是对象
+```js:WeakMap食用🌰
+// WeakMap 的键只能是对象
 const wm = new WeakMap();
 let key = {} // 堆内存生成一个对象 暂时叫 obj1
 wm.set(key, 1);
 key = null;
-当我们设置 wm.set(key, 1) 时， wm 对 key 所引用的对象的是弱引用
-然后把key设置为null，obj1就只有wm的弱引用关系，垃圾回收再次检查到会执行回收机制。
+
 ```
+
+当我们设置 `wm.set(key, 1)` 时， wm 对 key 所引用的对象的是弱引用
+
+然后把 `key 设置为 null，obj1 就只有 wm 的弱引用关系`，垃圾回收再次检查到会执行回收机制。
 
 弱引用：
 
 > 垃圾回收机制不考虑对该对象的引用。
 
-<br />
 也就是说，如果其他对象都不再引用该对象，那么垃圾回收机制会自动回收该对象所占用的内存，不考虑该对象是否还在该弱引用的结构中。
-<br />
 注意： 弱引用的对象不可遍历！
-<br />
-上码
 
-```
+```js:hooks响应式实现
 import { useRef } from 'react'
 import { useCreation } from '../useCreation'
 import { useUpdate } from '../useUpdate'
@@ -97,5 +96,3 @@ export function useReactive(initialState) {
 }
 
 ```
-
-收获蛮多 算是 proxy 比较好的实践应用了。
