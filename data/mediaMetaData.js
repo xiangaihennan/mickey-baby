@@ -1,6 +1,30 @@
 const mediaData = {
   musicList: [
     {
+      name: `with out Me`,
+      url: `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/9c8915ad387702292344515703/f0.m4a`,
+    },
+    {
+      name: `marmira`,
+      url: `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/915bc9b2387702292344081872/f0.m4a`,
+    },
+    {
+      name: `ante up`,
+      url: `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/ec92d576387702292352424777/f0.m4a`,
+    },
+    {
+      name: `Let's party`,
+      url: `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/959bbd53387702292344225945/f0.m4a`,
+    },
+    {
+      name: `MyName`,
+      url: `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/e81d1baa387702292352251461/f0.m4a`,
+    },
+    {
+      name: `JDS`,
+      url: `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/9a237ef8387702292344408884/f0.m4a`,
+    },
+    {
       name: `a night`,
       url: `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/c5234e0b387702291664116052/f0.mp3`,
     },
