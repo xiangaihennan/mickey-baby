@@ -1,0 +1,96 @@
+---
+title: 正则表达式
+date: '2021-12-3'
+tags: ['js', '正则表达式']
+draft: false
+summary: '正则表达式整理'
+---
+
+<TOCInline toc={props.toc} exclude="Overview" asDisclosure />
+
+## mdn 正则表达式
+
+[正则表达式](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions)
+
+## dotAll 标志
+
+正则表达式中用于匹配任意字符的点（.）不匹配换行符，比如\n 和\r 或非 BMP 字符，如表情符号。
+
+```js:没有s标识符
+const text = `
+foo
+bar
+`
+const re = /foo.bar/;
+console.log(re.test(text)); // false
+```
+
+为此，规范新增了 s 标志（意思是单行，singleline），从而解决了这个问题：
+
+```js:添加s标识符
+const text = `
+foo
+bar
+`
+const re = /foo.bar/s;
+console.log(re.test(text)); // true
+```
+
+## 向前查找
+
+正则表达式支持肯定式向前查找断言和否定式向前查找断言，可以匹配后跟指定字符串的表达式：
+
+```js:向前查找断言（查找某个规则前的）
+
+const text = 'foobar';
+// `肯定式向前查找` 查找bar前面的foo 不包含bar
+const barFrontRegT = /foo(?=bar)/
+console.log(barFrontRegT.exec(text)) // ['foo', index: 0, input: 'foobar', groups: undefined]
+
+// `否定式向前查找` 匹配不是foo后面不是bar的规则 （符合返回foo）
+const barFrontRegF = /foo(?!bar)/
+console.log(bazFrontRegF.exec(text)) // ['foo', index: 0, input: 'foobar', groups: undefined]
+
+```
+
+## 向后查找
+
+```js:向后查找断言（查找某个规则后的）
+const text = 'foobar';
+// `肯定式向后查找` 查找foo后面的bar 不包含bar
+const fooBehindT = /(?<=foo)bar/
+console.log(barBehindT.exec(text)) // ['bar', index: 0, input: 'foobar', groups: undefined]
+
+// `否定式向后查找` 匹配不是bar前面不是foo的规则 （符合返回bar）
+
+const fooBehindF = /(?<!foo)bar/
+console.log(fooBehindF.exec(text)) // ['bar', index: 0, input: 'foobar', groups: undefined]
+
+
+
+```
+
+## 扩展( 查找组合使用)
+
+```js:查找两个目标的字符串：
+const extractReg = /(?<=(https|http):\/\/).+(?=\.com)/
+
+extractReg.exec(`https://xxx.xxx.xxx.asds.com/xx?a=123`) // `匹配//到.com之前的文本`
+```
+
+## 捕获组
+
+```js:常规捕获
+    const text = '2021-12-3';
+    const re = /(\d+)-(\d+)-(\d+)/;
+    console.log(re.exec(text));
+    //['2021-12-3', '2021', '12', '3', index: 0, input: '2021-12-3', groups: undefined]
+```
+
+```js:捕获命名
+const text = '2021-12-3';
+const re = /(?<year>\d+)-(?<month>\d+)-(?<day>\d+)/;
+console.log(re.exec(text).groups);
+// {year: '2021', month: '12', day: '3'}
+
+```
