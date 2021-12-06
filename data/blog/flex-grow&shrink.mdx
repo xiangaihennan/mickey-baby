@@ -1,0 +1,110 @@
+---
+title: flex grow&shrink
+date: '2021-12-6'
+tags: ['css']
+draft: false
+summary: 'css集合'
+---
+
+<TOCInline toc={props.toc} exclude="Overview" asDisclosure />
+
+# flex
+
+<div className="bg-white">
+  <Image
+    src={'/static/images/css/flex.webp'}
+    className="object-fill object-center lg:h-48 md:h-36"
+    width="518"
+    height="666"
+  />
+</div>
+
+### flex-grow
+
+功能：设定子元素占比
+
+```css:🌰
+<div class='parent'>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div class='grow-10'></div>
+</div>
+
+.parent{
+  width: 300px;
+  height: 100px;
+  border: 1px solid #c3c3c3;
+  display: flex;
+}
+.parent > div{
+  flex-grow:1 // 如果不写 默认值也为1
+}
+.parent > .grow-10{
+  flex-grow : 10
+}
+
+
+```
+
+parent 元素 300px
+
+parent 下的子元素 flex-grow 相加得 15
+
+那么每份的宽度就是 300px/15 = 20px；
+
+grow-10 的占了 10 份他的宽度就是 20 \* 10 = 200px
+
+其余子元素每个都是 20px
+
+`公式： parent元素宽度/子元素总 grow 的和 = 每份 grow 的宽度`
+
+### flex-shrink
+
+功能：当子元素总和超出父元素宽度时，规定子元素如何收缩
+
+```css:🌰
+<div class='parent'>
+  <div></div>
+  <div class='shrink-1'></div>
+  <div class='shrink-1'></div>
+  <div class='shrink-2'></div>
+  <div class='shrink-2'></div>
+</div>
+
+.parent{
+  width: 300px;
+  height: 100px;
+  border: 1px solid #c3c3c3;
+  display: flex;
+}
+.parent > div{
+  flex-basis: 90px;
+  flex-shrink:0 // 默认值为0
+}
+.parent >.shrink-1{
+  flex-shrink : 1
+}
+.parent >.shrink-2{
+  flex-shrink : 2
+}
+
+```
+
+parent 元素 300px
+
+子元素总宽度为 90px \* 5 = 450px 溢出 150px
+
+溢出量 150 / 总份数 6 约等于 25px （每份 shrink 收缩宽度）
+
+first-child 最终宽度为 90px;
+
+class shrink-1 的最终宽度为 90px-25px;
+
+class shrink-2 的最终宽度为 90px-25px \*2;
+
+`公式： 溢出量\shrink总权重 = 每份shrink需要收缩的宽度`
+
+> 总结：grow 根据父元素总宽度计算如何扩展， shrink 根据溢出量计算如何收缩

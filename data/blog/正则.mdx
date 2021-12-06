@@ -75,7 +75,7 @@ console.log(fooBehindF.exec(text)) // ['bar', index: 0, input: 'foobar', groups:
 ```js:查找两个目标的字符串：
 const extractReg = /(?<=(https|http):\/\/).+(?=\.com)/
 
-extractReg.exec(`https://xxx.xxx.xxx.asds.com/xx?a=123`) // `匹配//到.com之前的文本`
+extractReg.exec(`https://xxx.xxx.xxx.asds.com/xx?a=123`) // `匹配https://或http://到.com之前的文本`
 ```
 
 ## 捕获组

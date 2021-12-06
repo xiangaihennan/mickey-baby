@@ -49,8 +49,8 @@ const Giscus = ({ mapping }) => {
   return (
     <div className="pt-6 pb-6 text-center text-gray-700 dark:text-gray-300">
       {enableLoadComments && (
-        <button className="text-blue-200" onClick={LoadComments}>
-          有疑问？点我一起讨论
+        <button className="" onClick={LoadComments}>
+          加载评论。。。
           <span role="img" aria-describedby aria-label>
             🤔
           </span>
