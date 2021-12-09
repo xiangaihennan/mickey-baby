@@ -22,7 +22,7 @@ export default function Pagination({ totalPages, currentPage }) {
         </span>
         {!nextPage && (
           <button rel="next" className="cursor-auto disabled:opacity-50" disabled={!nextPage}>
-            Next
+            没有更多了。。。
           </button>
         )}
         {nextPage && (

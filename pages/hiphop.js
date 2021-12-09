@@ -2,7 +2,7 @@ import siteMetadata from '@/data/siteMetadata'
 import { PageSEO } from '@/components/SEO'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import ListHiphop from '@/layouts/ListHiphop'
-export const VIDEOS_PER_PAGE = 10
+export const VIDEOS_PER_PAGE = 4
 
 export async function getStaticProps() {
   const videos = await getAllFilesFrontMatter('hiphop')
@@ -14,7 +14,7 @@ export async function getStaticProps() {
   return { props: { initialDisplayPosts, videos, pagination } }
 }
 export default function HipHop({ initialDisplayPosts, videos, pagination }) {
-  // console.log(initialDisplayPosts, videos, pagination, 'ooooooooooooooooooooooo')
+  console.log(initialDisplayPosts, videos, pagination, 'ooooooooooooooooooooooo')
   return (
     <>
       <PageSEO title={`${siteMetadata.author}`} description={siteMetadata.description} />

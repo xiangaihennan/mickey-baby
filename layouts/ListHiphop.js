@@ -7,7 +7,7 @@ import formatDate from '@/lib/utils/formatDate'
 import VideoCard from '@/components/VideoCard'
 
 export default function ListLayout({ videos, title, initialDisplayPosts = [], pagination }) {
-  // console.log(videos, '------------')
+  console.log(videos, initialDisplayPosts, '------------')
   // TODO 滚动功能 上下页
   return (
     <>
@@ -21,7 +21,7 @@ export default function ListLayout({ videos, title, initialDisplayPosts = [], pa
         <div className="container py-12">
           {/* /static/video/firstHiphop.mp4 */}
           <div className="flex flex-wrap -m-4">
-            {videos.map((d) => (
+            {initialDisplayPosts.map((d) => (
               <VideoCard
                 key={d.date}
                 title={d.title}

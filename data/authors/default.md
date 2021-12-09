@@ -9,5 +9,3 @@ qq: //message/?uin=405059000&Site=&Menu-=yes
 # linkedin: https://www.linkedin.com
 github: https://github.com
 ---
-
-省略三千字。。。

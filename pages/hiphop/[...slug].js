@@ -22,7 +22,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  console.log(params, '888892222222222222222222')
+  // console.log(params, '888892222222222222222222')
   const allPosts = await getAllFilesFrontMatter('hiphop')
   const postIndex = allPosts.findIndex(
     (videos) => formatSlug(videos.slug) === params.slug.join('/')
@@ -43,11 +43,11 @@ export async function getStaticProps({ params }) {
 
   return { props: { videos, authorDetails, prev, next } }
 }
-
+// 详情页面
 export default function HiphopPage({ videos, authorDetails, prev, next }) {
   // TODO --------------
   const { mdxSource, toc, frontMatter } = videos
-  console.log(frontMatter, '999999999999999999999')
+  // console.log(frontMatter, '999999999999999999999')
   return (
     <>
       {frontMatter.draft !== true ? (

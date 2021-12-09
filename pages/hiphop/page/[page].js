@@ -41,6 +41,7 @@ export async function getStaticProps(context) {
 }
 // 列表页面
 export default function PostPage({ videos, initialDisplayPosts, pagination }) {
+  // console.log(videos,initialDisplayPosts,'888888888888888123123');
   return (
     <>
       <PageSEO title={siteMetadata.title} description={siteMetadata.description} />

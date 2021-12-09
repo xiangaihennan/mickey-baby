@@ -7,7 +7,7 @@ import siteMetadata from '@/data/siteMetadata'
 const isProduction = process.env.NODE_ENV === 'production'
 
 const Analytics = () => {
-  console.log(siteMetadata.analytics.baiduAnalytics)
+  // console.log(siteMetadata.analytics.baiduAnalytics)
   return (
     <>
       {isProduction && siteMetadata.analytics.plausibleDataDomain && <Plausible />}
