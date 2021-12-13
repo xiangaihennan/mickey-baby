@@ -1,6 +1,6 @@
 const siteMetadata = {
-  title: '捕鱼达人🤨',
-  author: '捕鱼达人🤨',
+  title: 'mickey实验室v1',
+  author: 'mickey实验室v1',
   keywords: '刘泽奇，刘泽奇的博客，泽奇blog，快乐',
   headerTitle: 'keep happy',
   description: '不以物喜，不以己悲。',
