@@ -1,0 +1,93 @@
+---
+title: 'css动态主题切换方案'
+date: '2021-12-23'
+tags: ['主题切换方案']
+draft: false
+summary: '因为是css，所以适用于任何框架的主题切换方案'
+---
+
+<TOCInline toc={props.toc} exclude="Overview" asDisclosure />
+
+> 主要是通过 css 的 var 函数使用变量的方式来实现动态替换，当前项目以 Vue 做示范
+
+# 方案落地
+
+## 设置全局变量并全局引入
+
+```css:theme.less
+:root {
+  --ob-primary-color: #000000;
+}
+```
+
+<Image alt="ocean" src="/static/images/blog/main.png" width={500} height={400} />
+## 使用变量
+<Image alt="ocean" src="/static/images/blog/shiyong.png" width={500} height={400} />
+## 设置主题文件
+<Image alt="ocean" src="/static/images/blog/themeless.png" width={500} height={400} />
+```js:设置全局配置
+import hhhh from "./hhhh"
+import xx from "./as"
+class ChannelConfig {
+  constructor() {
+    this.channelName = ""
+    this.curThemeConfig = ""
+    this.config = {
+      huohua: {
+        imgPath: `hhhh`,
+        companyName: `xxxx`,
+        themeConfig: hhhh
+      },
+      xx: {
+        imgPath: `as`,
+        companyName: `xx`,
+        themeConfig: xx
+      }
+    }
+  }
+  init(Vue) {
+    // 获取
+    this.getChannelSource()
+    Vue.prototype.themeTools = this
+    Vue.prototype.imgPath = this.imgPath
+    this.setTheme(this.curThemeConfig)
+  }
+  install(Vue) {
+    this.init(Vue)
+  }
+  // 设置主题色
+  setTheme(themeConfig) {
+    Object.keys(themeConfig).map((item) => {
+      this.cutSingle(item, themeConfig[item])
+    })
+  }
+  // 修改单个变量颜色
+  cutSingle = (name, val) => {
+    const rootStyle = document.documentElement.style
+    rootStyle.setProperty(name, val)
+  }
+  // 获取对应渠道图片地址
+  imgPath(imgPath = "") {
+    const fullPath = require(`@/assets/${this.mapImgPath[this.channelName]}}/${imgPath.replace(
+      /^\/+/,
+      ""
+    )}`)
+    return fullPath
+  }
+  getChannelSource() {
+   //...
+        获取环境 初始化主题配置等。。。
+  }
+}
+export default new ChannelConfig()
+
+```
+## 在任意地方切换主题颜色
+
+<Image alt="ocean" src="/static/images/blog/qiehuan.png" width={700} height={400} />
+
+# 兼容IE解决方案（明天上）
+
+
+
+```
