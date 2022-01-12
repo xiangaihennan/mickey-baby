@@ -12,6 +12,4 @@ qq: //message/?uin=405059000&Site=&Menu-=yes
 # ![简历](/static/images/resume/jianli.jpeg)
 ---
 
-本职工作是码农，喜欢简单的生活，简单的事简单的人。
-
-人间匆匆，定不辜负，尽此生感受世界的美好。
+少吹牛逼，别整那没用的。
