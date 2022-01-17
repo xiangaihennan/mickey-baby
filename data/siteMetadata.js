@@ -1,6 +1,6 @@
 const siteMetadata = {
-  title: 'locking_奇',
-  author: 'locking_奇',
+  title: 'locker--奇',
+  author: 'locker--奇',
   keywords: '刘泽奇，刘泽奇的博客，泽奇blog，快乐',
   headerTitle: 'keep happy',
   description: '不以物喜，不以己悲。',
