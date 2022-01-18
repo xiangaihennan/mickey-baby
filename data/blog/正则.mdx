@@ -76,6 +76,24 @@ console.log(fooBehindF.exec(text)) // ['bar', index: 0, input: 'foobar', groups:
 const extractReg = /(?<=(https|http):\/\/).+(?=\.com)/
 
 extractReg.exec(`https://xxx.xxx.xxx.asds.com/xx?a=123`) // `匹配https://或http://到.com之前的文本`
+
+```
+
+```js:匹配千分位（相当于规则内插入字符）
+/*
+/(?!^)/: 字符串头部不能是空
+
+ /(?=(\d{3})+$)/g :匹配  xxx(?=数字*3的倍数结尾)每次匹配的结果是xxx
+
+*/
+const regex = /(?!^)(?=(\d{3})+(\.|$))/g;
+"123456.12".replace(regex, ','); // "123,456.12"
+"123456".replace(regex, ','); // "123,456"
+
+
+// 字符串插入
+(?=xxx) 插入到定义规则前
+(?<=xxx) 插入到定义规则后
 ```
 
 ## 捕获组
