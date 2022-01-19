@@ -2,21 +2,58 @@
 title: npm
 date: '2022-1-14'
 tags: ['npm', '工程化', 'node']
-draft: true
+draft: false
 summary: '构建'
 ---
 
 <TOCInline toc={props.toc} exclude="Overview" asDisclosure />
 
-# 一、基础知识
+[npm 官方文档](https://docs.npmjs.com/cli/v8 'npm官方文档')
 
-### 1.npm 脚本的使用（工程化基础）
+# 一、配置 npm
 
-[npm](https://docs.npmjs.com/cli/v8 'npm')
+### 1.安装
 
-[阮一峰 npmscript 运用](http://www.ruanyifeng.com/blog/2016/10/npm_scripts.html '阮一峰的解读')
+使用 npm 先安装 nodejs
 
+查看是否已经安装了 Node.js 和 npm 并检查安装的版本，请运行以下命令：
 
-### 二级标题
+```javascript
+node - v
+npm - v
+```
 
-> 总结说明
+扩展："nvm" nodejs 版本管理工具 & "nrm" npm 镜像源管理工具
+
+<br />
+
+## 2.npm 配置文件
+
+npm 从命令行、环境变量和 npmrc 文件获取其配置设置。
+
+    操作配置文件通过[npm config ](https://docs.npmjs.com/cli/v7/using-npm/config)
+
+1. 每个项目的配置文件（/path/to/my/project/.npmrc）
+2. 每个用户的配置文件 (~/.npmrc)全局配置文件 ～大部分使用时都在这里查看配置
+3. ($PREFIX/etc/npmrc)npm
+4. 内置配置文件 (/path/to/npm/npmrc)
+
+## 3. package.json
+
+[package.json 说明](https://docs.npmjs.com/cli/v7/configuring-npm/package-json)
+
+## 4.package-lock
+
+[package-lock.json 说明](https://docs.npmjs.com/cli/v7/configuring-npm/package-lock-json)
+
+# 二、使用 npm
+
+[npm 官方命令查看](https://docs.npmjs.com/cli/v7/commands)
+
+[常用命令](https://zhuanlan.zhihu.com/p/122224879)
+
+<br />
+
+# 三、发布你的 package
+
+。。。
