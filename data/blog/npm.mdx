@@ -7,12 +7,11 @@ summary: '构建'
 ---
 
 <TOCInline toc={props.toc} exclude="Overview" asDisclosure />
-
 [npm 官方文档](https://docs.npmjs.com/cli/v8 'npm官方文档')
 
 # 一、配置 npm
 
-### 1.安装
+## 安装
 
 使用 npm 先安装 nodejs
 
@@ -23,28 +22,99 @@ node - v
 npm - v
 ```
 
-扩展："nvm" nodejs 版本管理工具 & "nrm" npm 镜像源管理工具
+扩展："nvm" nodejs 版本管理工具 & "nrm" 镜像源管理工具
 
 <br />
 
-## 2.npm 配置文件
+## npm 配置文件
 
 npm 从命令行、环境变量和 npmrc 文件获取其配置设置。
 
-    操作配置文件通过[npm config ](https://docs.npmjs.com/cli/v7/using-npm/config)
+```
+操作配置文件通过[npm config ](https://docs.npmjs.com/cli/v7/using-npm/config)
+```
 
 1. 每个项目的配置文件（/path/to/my/project/.npmrc）
 2. 每个用户的配置文件 (~/.npmrc)全局配置文件 ～大部分使用时都在这里查看配置
 3. ($PREFIX/etc/npmrc)npm
 4. 内置配置文件 (/path/to/npm/npmrc)
 
-## 3. package.json
+## package.json
 
-[package.json 说明](https://docs.npmjs.com/cli/v7/configuring-npm/package-json)
+[package.json](https://docs.npmjs.com/cli/v7/configuring-npm/package-json)
 
-## 4.package-lock
+```json:常用配置解释说明
+{
+  "name": "hello world", // 项目名称
+  "version": "0.0.1", // 版本号：大版本.次要版本.小版本
+  "author": "张三",
+  "description": "第一个node.js程序",
+  "keywords": ["node.js", "javascript"], // 关键词，有助于 npm search 发现
+  "repository": {
+    // 存储库，指定代码所在位置（如果git repo在GitHub上，那么该npm docs 命令将能够找到文件位置。）
+    "type": "git",
+    "url": "https://path/to/url"
+  },
+  "license": "MIT", // 指定包许可证，详细可见[SPDX许可证ID的完整列表](https://spdx.org/licenses/)
+  "engines": { "node": "0.10.x" }, // 指定该模块运行的平台，可以指定 node 版本、npm 版本等
+  "bugs": { "url": "http://path/to/bug", "email": "bug@example.com" }, // 项目问题跟踪器的URL和应报告问题的电子邮件地址。
+  "contributors": [{ "name": "李四", "email": "lisi@example.com" }],
+  "bin": {
+    // 指定内部命令对应的可执行文件的位置，在 scripts 中就可以简写
+    "webpack": "./bin/webpack.js"
+  },
+  "main": "lib/webpack.js", // 指定加载的模块入口文件，require('moduleName')就会加载这个文件。这个字段的默认值是模块根目录下面的index.js。
+  "config": { "port": "8080" }, // 用于添加命令行的环境变量（用户在运行 scripts 命令时，就默认在脚本文件中添加 process.env.npm_package_config_port，用户可以通过 npm config set foo:port 80 命令更改这个值）
+  "scripts": {
+    // 指定运行脚本的 npm 命令行缩写
+    "start": "node index.js"
+  },
+  "peerDependencies": {
+    // 指定项目安装必须一起安装的模块及其版本号，（注意：从 npm 3.0 开始，peerDependencies不会再默认安装）
+    "chai": "1.x"
+  },
+  "dependencies": {
+    // 指定项目运行所依赖的模块
+    "express": "latest",
+    "mongoose": "~3.8.3",
+    "handlebars-runtime": "~1.0.12",
+    "express3-handlebars": "~0.5.0",
+    "MD5": "~1.2.0"
+  },
+  "devDependencies": {
+    // 指定项目开发所需要的模块
+    "bower": "~1.2.8",
+    "grunt": "~0.4.1",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-jshint": "~0.7.2",
+    "grunt-contrib-uglify": "~0.2.7",
+    "grunt-contrib-clean": "~0.5.0",
+    "browserify": "2.36.1",
+    "grunt-browserify": "~1.3.0"
+  },
+  "browser": {
+    // 指定该模板供浏览器使用的版本
+    "tipso": "./node_modules/tipso/src/tipso.js"
+  },
+  "preferGlobal": true // 表示当用户不将该模块安装为全局模块时（即不用–global参数），要不要显示警告，表示该模块的本意就是安装为全局模块。
+}
+```
 
-[package-lock.json 说明](https://docs.npmjs.com/cli/v7/configuring-npm/package-lock-json)
+> tips :有些插件可能也会把配置放在 package.json 里 比如 eslint babel 等
+
+## 版本号说明
+
+[语义化版本控制规范](https://semver.org/lang/zh-CN/)
+
+[npm 的语义版本器](https://github.com/npm/node-semver#versions)
+
+常用指定版本范围的方式：
+
+- 补丁发布：`1.0`或`1.0.x`或`~1.0.4`
+- 次要版本：`1`或`1.x`或`^1.0.4`
+- 主要版本：`*`或`x`
+
+  <br />
 
 # 二、使用 npm
 
@@ -52,8 +122,20 @@ npm 从命令行、环境变量和 npmrc 文件获取其配置设置。
 
 [常用命令](https://zhuanlan.zhihu.com/p/122224879)
 
-<br />
+# 三、脚本说明
 
-# 三、发布你的 package
+[阮大佬文档](https://www.ruanyifeng.com/blog/2016/10/npm_scripts.html)
 
-。。。
+> 发布时 bin 字段指向的脚本文件 要添加命令解释器 否则脚本无法正常运行
+
+![截图](/static/images/code/headscripts.png)
+
+```js:常见命令解释器
+
+#!/usr/bin/env node
+
+#!/usr/bin/env bash
+
+#!/bin/sh
+
+```
