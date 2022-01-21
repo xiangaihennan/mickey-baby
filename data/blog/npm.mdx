@@ -11,7 +11,7 @@ summary: '构建'
 
 # 一、配置 npm
 
-## 安装
+### 安装
 
 使用 npm 先安装 nodejs
 
@@ -26,7 +26,7 @@ npm - v
 
 <br />
 
-## npm 配置文件
+### npm 配置文件
 
 npm 从命令行、环境变量和 npmrc 文件获取其配置设置。
 
@@ -39,7 +39,7 @@ npm 从命令行、环境变量和 npmrc 文件获取其配置设置。
 3. ($PREFIX/etc/npmrc)npm
 4. 内置配置文件 (/path/to/npm/npmrc)
 
-## package.json
+### package.json
 
 [package.json](https://docs.npmjs.com/cli/v7/configuring-npm/package-json)
 
@@ -102,7 +102,7 @@ npm 从命令行、环境变量和 npmrc 文件获取其配置设置。
 
 > tips :有些插件可能也会把配置放在 package.json 里 比如 eslint babel 等
 
-## 版本号说明
+### 版本号说明
 
 [语义化版本控制规范](https://semver.org/lang/zh-CN/)
 
@@ -116,13 +116,37 @@ npm 从命令行、环境变量和 npmrc 文件获取其配置设置。
 
   <br />
 
-# 二、使用 npm
+# 二、npm 命令
 
 [npm 官方命令查看](https://docs.npmjs.com/cli/v7/commands)
 
 [常用命令](https://zhuanlan.zhihu.com/p/122224879)
 
 # 三、脚本说明
+
+```node:命令行参数
+npm run test -- --grep="pattern"
+
+带 --传参是为了不被 npm 命令解析
+```
+
+```:脚本示例说明
+ "scripts": {
+    "start": "next-remote-watch ./data",
+    "build": "next build && node ./scripts/generate-sitemap",
+    "lint": "next lint --fix --dir pages --dir components --dir lib --dir layouts --dir scripts",
+    "prepare": "husky install"
+  },
+  start ： 执行后 运行node_modules/.bin/next-remote-watch 传人参数 ./data
+  build ： 先运行node_modules/.bin/next 传入参数build 成功后执行 node ./scripts/generate-sitemap
+  lint ： 执行后 运行node_modules/.bin/next 传人参数 lint --fix --dir pages --dir components --dir lib --dir layouts --dir scriptsÍ
+  prepare：钩子 在打包和发布包之前，在本地npm install上不带任何参数，以及在安装git依赖项的时候运行(见下文)。它在预发布之后运行，但在prepublishOnly之前运行。
+
+
+
+```
+
+node API 获取命令行参数：[链接](http://nodejs.cn/api/process/process_argv.html)
 
 [阮大佬文档](https://www.ruanyifeng.com/blog/2016/10/npm_scripts.html)
 
