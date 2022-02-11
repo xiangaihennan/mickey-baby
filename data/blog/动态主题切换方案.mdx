@@ -8,7 +8,7 @@ summary: '因为是css，所以适用于任何框架的主题切换方案'
 
 <TOCInline toc={props.toc} exclude="Overview" asDisclosure />
 
-> 主要是通过 css 的 var 函数使用变量的方式来实现动态替换，当前项目以 Vue 做示范
+> 主要是通过 css 的 var 函数使用变量的方式来实现动态替换，以下以 Vue 做示例
 
 # 方案落地
 
@@ -82,7 +82,7 @@ class ChannelConfig {
 export default new ChannelConfig()
 
 ```
-## 在任意地方切换主题颜色
+## 动态切换主题颜色
 
 <Image alt="ocean" src="/static/images/blog/qiehuan.png" width={700} height={400} />
 
@@ -90,3 +90,4 @@ export default new ChannelConfig()
 https://github.com/postcss/postcss-custom-properties
 
 
+```
