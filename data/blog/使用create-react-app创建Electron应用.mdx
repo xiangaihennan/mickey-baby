@@ -1,0 +1,161 @@
+---
+title: 使用create-react-app创建Electron应用
+date: '2022-3-10'
+tags: ['react', 'electron']
+draft: false
+summary: '桌面端'
+---
+
+<TOCInline toc={props.toc} exclude="Overview" asDisclosure />
+
+# 开发环境搭建
+
+```js:初始化
+// --template typescript 如果用ts 后面加参数
+npx create-react-app electron-cra
+yarn add electron electron-builder cross-env wait-on concurrently --dev
+yarn add electron-is-dev
+```
+
+## 根目录下添加 main.js
+
+```js:main.js
+const { app, BrowserWindow } = require('electron')
+
+function createWindow() {
+    const win = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+            nodeIntegration: true
+        }
+    })
+    win.loadURL('http://localhost:3000/');
+    win.webContents.openDevTools();
+}
+
+app.whenReady().then(createWindow)
+
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        app.quit()
+    }
+})
+
+app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow()
+    }
+})
+
+
+```
+
+然后在 package.json 中添加"main": "main.js"
+这时候启动两个终端，一个运行 yarn start，一个运行 yarn electron ./，就能看到 Electron 运行起来了
+
+# 完整配置
+
+```js:public/electron.js
+//public/electron.js
+const { app, BrowserWindow } = require('electron')
+const isDev = require('electron-is-dev')
+
+function createWindow() {
+  const win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+    },
+  })
+  win.webContents.openDevTools()
+  win.loadURL(isDev ? 'http://localhost:3000' : `file://${__dirname}/index.html`)
+}
+
+app.whenReady().then(createWindow)
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
+})
+
+app.on('activate', () => {
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow()
+  }
+})
+```
+
+```json:package.json 详细配置
+{
+  "name": "electron-cra",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "./",
+  "main": "public/electron.js",
+  "build": {
+    "appId": "electron.antd",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "extraMetadata": {
+      "main": "build/electron.js"
+    }
+  },
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@types/jest": "^26.0.15",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.53",
+    "@types/react-dom": "^16.9.8",
+    "electron-is-dev": "^1.2.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-scripts": "4.0.1",
+    "typescript": "^4.0.3",
+    "web-vitals": "^0.2.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "electron-dev": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron-pack": "electron-builder",
+    "preelectron-pack": "yarn build"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "concurrently": "^5.3.0",
+    "cross-env": "^7.0.3",
+    "electron": "^11.1.1",
+    "electron-builder": "^22.9.1",
+    "wait-on": "^5.2.0"
+  }
+}
+```

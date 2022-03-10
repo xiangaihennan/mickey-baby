@@ -1,8 +1,8 @@
 const siteMetadata = {
-  title: 'locker--奇',
-  author: 'locker--奇',
-  keywords: '刘泽奇，刘泽奇的博客，泽奇blog，快乐',
-  headerTitle: 'keep happy',
+  title: '______zq',
+  author: '______zq',
+  keywords: 'blog，FE，',
+  headerTitle: '实践出真知',
   description: '不以物喜，不以己悲。',
   language: 'cmn-Hans-CN',
   siteUrl: 'https://mickey-baby.vercel.app/',

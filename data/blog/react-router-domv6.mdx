@@ -1,0 +1,334 @@
+---
+title: react-router-domv6
+date: '2022-3-10'
+tags: ['react', '']
+draft: false
+summary: 'react'
+---
+
+<TOCInline toc={props.toc} exclude="Overview" asDisclosure />
+
+# 官方文档
+
+[官网 api 入口文档](https://reactrouter.com/docs/en/v6/api)
+
+# v5 v6 部分差异对比
+```js
+1. `<Switch>重命名为<Routes>`。
+2. `<Route>的新特性变更`。
+3. 嵌套路由变得更简单。
+4. 用 useNavigate 代替 useHistory。
+5. 新钩子 useRoutes 代替 react-router-config。
+6. 大小减少：从 20kb 到 8kb
+```
+<br />
+
+# `<Switch>重命名为<Routes>`
+
+<br />
+
+```jsx
+// v5
+<Switch>
+    <Route exact path="/"><Home /></Route>
+    <Route path="/profile"><Profile /></Route>
+</Switch>
+
+// v6
+<Routes>
+    <Route path="/" element={<Home />} />
+    <Route path="profile/*" element={<Profile />} />
+</Routes>
+```
+
+# `<Route>的新特性变更`
+
+component/render 被 element 替代
+
+```jsx
+import Profile from './Profile';
+
+// v5
+<Route path=":userId" component={Profile} />
+<Route
+  path=":userId"
+  render={routeProps => (
+    <Profile routeProps={routeProps} animate={true} />
+  )}
+/>
+
+// v6
+<Route path=":userId" element={<Profile />} />
+<Route path=":userId" element={<Profile animate={true} />} />
+
+```
+
+# 嵌套路由变得更简单
+
+具体变化有以下：
+
+- `<Route children> 已更改为接受子路由。`
+- `比<Route exact>和<Route strict>更简单的匹配规则。`
+- `<Route path> 路径层次更清晰。`
+
+## 简化嵌套路由定义
+
+v5 中的嵌套路由必须非常明确定义，且要求在这些组件中包含许多字符串匹配逻辑
+
+v5 的处理
+
+```jsx
+// v5
+import { BrowserRouter, Switch, Route, Link, useRouteMatch } from 'react-router-dom'
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route path="/profile" component={Profile} />
+      </Switch>
+    </BrowserRouter>
+  )
+}
+
+function Profile() {
+  let { path, url } = useRouteMatch()
+
+  return (
+    <div>
+      <nav>
+        <Link to={`${url}/me`}>My Profile</Link>
+      </nav>
+
+      <Switch>
+        <Route path={`${path}/me`}>
+          <MyProfile />
+        </Route>
+        <Route path={`${path}/:id`}>
+          <OthersProfile />
+        </Route>
+      </Switch>
+    </div>
+  )
+}
+```
+
+而在 v6 中，你可以删除字符串匹配逻辑。不需要任何 useRouteMatch()
+
+```jsx
+// v6
+import { BrowserRouter, Routes, Route, Link, Outlet } from 'react-router-dom'
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="profile/*" element={<Profile />} />
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
+function Profile() {
+  return (
+    <div>
+      <nav>
+        <Link to="me">My Profile</Link>
+      </nav>
+
+      <Routes>
+        <Route path="me" element={<MyProfile />} />
+        <Route path=":id" element={<OthersProfile />} />
+      </Routes>
+    </div>
+  )
+}
+```
+
+## 新 API:Outlet
+
+```jsx
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="profile" element={<Profile />}>
+          <Route path=":id" element={<MyProfile />} />
+          <Route path="me" element={<OthersProfile />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
+function Profile() {
+  return (
+    <div>
+      <nav>
+        <Link to="me">My Profile</Link>
+      </nav>
+      {/*
+       将直接根据上面定义的不同路由参数，渲染<MyProfile />或<OthersProfile />
+        */}
+      <Outlet />
+    </div>
+  )
+}
+```
+
+## `多个<Routes />`
+
+以前，我们只能 在 React App 中使用一个 Routes。但是现在我们可以在 React App 中使用多个路由，这将帮助我们基于不同的路由管理多个应用程序逻辑。
+
+```jsx
+import React from 'react'
+import { Routes, Route } from 'react-router-dom'
+
+function Dashboard() {
+  return (
+    <div>
+      <p>Look, more routes!</p>
+      <Routes>
+        <Route path="/" element={<DashboardGraphs />} />
+        <Route path="invoices" element={<InvoiceList />} />
+      </Routes>
+    </div>
+  )
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="dashboard/*" element={<Dashboard />} />
+    </Routes>
+  )
+}
+```
+
+## 用 useNavigate 代替 useHistory
+
+现在，history.push()将替换为 navigation()：
+
+```jsx
+import { useNavigate } from 'react-router-dom'
+
+function MyButton() {
+  let navigate = useNavigate()
+  function handleClick() {
+    navigate('/home')
+  }
+  return <button onClick={handleClick}>Submit</button>
+}
+
+navigate('/home')
+navigate('/home', { replace: true })
+```
+
+## 新钩子 useRoutes 代替 react-router-config
+
+```jsx
+function App() {
+  let element = useRoutes([
+    // 重定向 放在数组开始位置
+    {
+      path: '/',
+      element: <Navigate to="/a" />,
+    },
+    { path: '/', element: <Home /> },
+    {
+      path: 'invoices',
+      element: <Invoices />,
+      children: [
+        { path: ':id', element: <Invoice /> }, // 动态路由
+        { path: 'sent', element: <SentInvoices /> },
+      ],
+    },
+    // 404找不到
+    { path: '*', element: <NotFound /> },
+  ])
+  return element
+}
+```
+
+## 获取路由的参数
+
+```jsx
+useParams 获取动态路由的值；
+useSearchParams 获取查询字符串的值。
+// GoodsDetail.tsx
+import React,{ useEffect } from "react";
+import { useParams, useSearchParams  } from "react-router-dom";
+
+export default function GoodsDetail() {
+  // 获取动态路由的值
+  const params = useParams();
+
+  // 获取查询字符串的值
+  const [searchParams, setSearchParams] = useSearchParams();
+
+
+  useEffect(() => {
+    // 一个对象，key 为动态字符串的 key
+    console.log(params); // {id: '123'}
+
+    // 一个对象，但是不可直接点出属性
+    console.log(typeof searchParams); // object
+
+    // 输入 http://localhost:3304/goods/123?name=nihao
+    console.log(searchParams.get("name")); // nihao
+  }, []);
+
+  const handleAddParams = () => {
+    // 修改 查询字符串 的数据
+    setSearchParams({
+      name:"xxx"
+    });
+  };
+
+  return (
+    <div>
+      <h2 onClick={handleAddParams}>GoodsDetail Page</h2>
+    </div>
+  );
+}
+```
+
+## 默认路由
+
+> 当页面有多个子路由，比如在 /goods 时，页面展示 商品列表； /goods/:id 时，展示某个商品的详情。
+
+```jsx
+//Route 的 index 属性就是用来展示默认子路由的。
+import React from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Home from '../home/Home'
+import Goods from '../goods/Goods'
+import Customer from '../customer/Customer'
+import NotFound from '../not-found/NotFound'
+import GoodsDetail from '../goods/goods-detail/GoodsDetail'
+import GoodsList from '../goods/goods-list/GoodsList'
+
+export default function Router() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />}>
+          <Route path="goods" element={<Goods />}>
+            {/* 默认 子路由 ，在页面 路由为 /goods ，会展示该子路由 */}
+            <Route index element={<GoodsList />} />
+
+            <Route path=":id" element={<GoodsDetail />} />
+          </Route>
+
+          <Route path="customer" element={<Customer />}></Route>
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  )
+}
+```
