@@ -2,7 +2,7 @@ const siteMetadata = {
   title: '______zq',
   author: '______zq',
   keywords: 'blog,FE',
-  headerTitle: '实践出真知',
+  headerTitle: '合格的乌龟',
   description: '不以物喜，不以己悲。',
   language: 'cmn-Hans-CN',
   siteUrl: 'https://mickey-baby.vercel.app/',
