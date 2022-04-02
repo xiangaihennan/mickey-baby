@@ -12,4 +12,4 @@ qq: //message/?uin=405059000&Site=&Menu-=yes
 # ![简历](/static/images/resume/jianli.jpeg)
 ---
 
-少吹牛逼，别整那没用的。
+慢一点。

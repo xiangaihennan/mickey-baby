@@ -1,0 +1,48 @@
+---
+title: 使用vuecli-创建electron应用
+date: '2022-1-6'
+tags: ['桌面端', 'app']
+draft: false
+summary: '构建'
+---
+
+<TOCInline toc={props.toc} exclude="Overview" asDisclosure />
+
+# 快速开始
+
+## 安装 vue cli
+
+全局安装
+
+```sh:
+npm install -g @vue/cli
+# 或者
+yarn global add @vue/cli
+```
+
+如果升级全局的包
+
+```sh:
+npm update -g @vue/cli
+
+# 或者
+yarn global upgrade --latest @vue/cli
+```
+
+### 安装 vue-cli-plugin-electron-builder
+
+两种安装方式
+
+```sh:1.通过 shell 命令
+vue add vue-cli-plugin-electron-builder
+```
+
+```sh:2.通过可视化界面
+ vue ui
+```
+
+<Image alt="ocean" src="/static/images/blog/vue-ui.png" width={1000} height={400} />
+
+[vue-cli-plugin-electron-builder 插件文档链接](https://nklayman.github.io/vue-cli-plugin-electron-builder/)
+
+> 到此环境安装完成
