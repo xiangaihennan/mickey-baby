@@ -7,23 +7,45 @@ import Footer from './Footer'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player'
-import mediaMetaData from '@/data/mediaMetaData'
-import { useState } from 'react'
-
+import { musicList, REFERERKEY } from '@/data/mediaMetaData'
+import { useMemo, useState } from 'react'
+import { md5 } from 'md5js'
+const randomList = musicList.sort(() => Math.random() - 0.5)
+// 生成防盗链的url
+const getUrl = (url) => {
+  console.log(url, '============url,')
+  const reg = /(?<=(.+\.com))(.+)(?=(\/.+\.*))/g
+  const dir = url.match(reg)[0]
+  // 格式 key+dir+time
+  const unixTime = Math.floor(Date.now() / 1000)
+  const timestamp = unixTime.toString(16)
+  const sign = `${REFERERKEY}${dir}/${timestamp}`
+  const signMD5 = md5(sign, 32)
+  const urlParams = `?t=${timestamp}&sign=${signMD5}`
+  const result = `${url}${urlParams}`
+  return result
+}
 const LayoutWrapper = ({ children }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
-  let cacheIndex = 0
+
+  const url = useMemo(
+    (params) => {
+      return getUrl(randomList[currentIndex]?.url)
+    },
+    [currentIndex]
+  )
+
   const viedeoConfig = {
     autoPlay: true,
-    // layout: 'horizontal',
+    layout: 'horizontal',
     style: {
       border: 0,
       boxShadow: 'none',
       backgroundColor: 'transparent',
     },
     customControlsSection: [
-      // <div key={mediaMetaData.musicList[currentIndex]?.name}>
-      //   {mediaMetaData.musicList[currentIndex]?.name}&nbsp;&nbsp;&nbsp;
+      // <div key={musicList[currentIndex]?.name}>
+      //   {musicList[currentIndex]?.name}&nbsp;&nbsp;&nbsp;
       // </div>,
       RHAP_UI.ADDITIONAL_CONTROLS,
       RHAP_UI.MAIN_CONTROLS,
@@ -32,17 +54,16 @@ const LayoutWrapper = ({ children }) => {
     loop: true,
     showSkipControls: true,
     className: `bg-transparent`,
-    src: mediaMetaData.musicList[currentIndex]?.url,
+    src: url,
+    // REFERERKEY
     onPlay: (e) => {
-      console.log('onPlay', e)
-      cacheIndex = currentIndex
+      console.log(currentIndex, e, 'preIndex')
     },
     onClickPrevious: (ev) => {
-      setCurrentIndex((x) => cacheIndex)
+      setCurrentIndex((x) => (x - 1 + randomList.length) % randomList.length)
     },
     onClickNext: (ev) => {
-      const random = Math.floor(Math.random() * mediaMetaData.musicList.length)
-      setCurrentIndex((x) => random - x)
+      setCurrentIndex((x) => (x > randomList.length - 1 ? 0 : x + 1))
     },
   }
   return (
@@ -82,7 +103,9 @@ const LayoutWrapper = ({ children }) => {
             <MobileNav />
           </div>
         </header>
+        {/* <div className="hidden"> */}
         <AudioPlayer {...viedeoConfig}></AudioPlayer>
+        {/* </div> */}
         <main className="mb-auto">{children}</main>
         <Footer />
       </div>
