@@ -1,6 +1,6 @@
 ---
 title: npm（持续更新）
-date: '2022-1-14'
+date: '2022-5-10'
 tags: ['npm', '工程化', 'node', '持续更新']
 draft: false
 summary: '构建，持续更新'
@@ -148,7 +148,7 @@ npm run test -- --grep="pattern"
 
 node API 获取命令行参数：[链接](http://nodejs.cn/api/process/process_argv.html)
 
-[阮大佬文档](https://www.ruanyifeng.com/blog/2016/10/npm_scripts.html)
+[食用指南](https://www.ruanyifeng.com/blog/2016/10/npm_scripts.html)
 
 > 发布时 bin 字段指向的脚本文件 要添加命令解释器 否则脚本无法正常运行
 
@@ -181,3 +181,13 @@ node API 获取命令行参数：[链接](http://nodejs.cn/api/process/process_a
 根据提供的目标浏览器的环境来，智能添加 css 前缀，js 的 polyfill 垫片,来兼容旧版本浏览器，而不是一股脑的添加。避免不必要的兼容代码，以提高代码的编译质量。
 
 > `npx browserslist` 查看当前项目支持浏览器版本号列表
+
+# 五、npx 使用
+
+主要解决项目本地安装的包的使用问题：
+
+npx 非常智能的识别模块，如果模块存在，就使用。如果不存在，就临时下载，用完就删除。
+
+使用某个 node 模块的时候，根本不用关心是否安装过了。npx 会给你最满意的答案（没有对应模块就临时下载）。
+
+所以，不使用特殊参数的 npx 命令的基本逻辑是：先检查当前项目 node_modules/.bin 下，是否存在。不存在的话，就检查全局是否已经安装对应的模块。如果还没有的话，就去仓库里面去下载对应的模块，下载完毕就执行。执行完毕就删除，不留下一丝痕迹！

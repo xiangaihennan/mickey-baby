@@ -11,9 +11,10 @@ import mediaMetaData from '@/data/mediaMetaData'
 import { useState } from 'react'
 
 const LayoutWrapper = ({ children }) => {
-  const [curPlayerMusic, setCurPlayerMusic] = useState(0)
+  const [currentIndex, setCurrentIndex] = useState(0)
+  let cacheIndex = 0
   const viedeoConfig = {
-    autoPlay: false,
+    autoPlay: true,
     // layout: 'horizontal',
     style: {
       border: 0,
@@ -21,8 +22,8 @@ const LayoutWrapper = ({ children }) => {
       backgroundColor: 'transparent',
     },
     customControlsSection: [
-      // <div key={mediaMetaData.musicList[curPlayerMusic]?.name}>
-      //   {mediaMetaData.musicList[curPlayerMusic]?.name}&nbsp;&nbsp;&nbsp;
+      // <div key={mediaMetaData.musicList[currentIndex]?.name}>
+      //   {mediaMetaData.musicList[currentIndex]?.name}&nbsp;&nbsp;&nbsp;
       // </div>,
       RHAP_UI.ADDITIONAL_CONTROLS,
       RHAP_UI.MAIN_CONTROLS,
@@ -31,15 +32,17 @@ const LayoutWrapper = ({ children }) => {
     loop: true,
     showSkipControls: true,
     className: `bg-transparent`,
-    src: mediaMetaData.musicList[curPlayerMusic]?.url,
+    src: mediaMetaData.musicList[currentIndex]?.url,
     onPlay: (e) => {
       console.log('onPlay', e)
+      cacheIndex = currentIndex
     },
     onClickPrevious: (ev) => {
-      setCurPlayerMusic((x) => (x > 0 ? --x : mediaMetaData.musicList.length - 1))
+      setCurrentIndex((x) => cacheIndex)
     },
     onClickNext: (ev) => {
-      setCurPlayerMusic((x) => (x < mediaMetaData.musicList.length - 1 ? ++x : 0))
+      const random = Math.floor(Math.random() * mediaMetaData.musicList.length)
+      setCurrentIndex((x) => random - x)
     },
   }
   return (

@@ -1,6 +1,42 @@
 const mediaData = {
   musicList: [
     {
+      name: `mojito`,
+      url: `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/70f52ae6387702300590932430/f0.mp3`,
+    },
+    {
+      name: `暗号`,
+      url: `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/abb236ad387702300591191781/f0.mp3`,
+    },
+    {
+      name: `发如雪`,
+      url: `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/ae0ba452387702300591299066/f0.mp3`,
+    },
+    {
+      name: `爱在西元前`,
+      url: `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/abb236ac387702300591191780/f0.mp3`,
+    },
+    {
+      name: `爷爷泡的茶`,
+      url: `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/b48ad5eb387702300591526255/f0.mp3`,
+    },
+    {
+      name: `给我一首歌的时间`,
+      url: `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/ade68012387702300591277907/f0.mp3`,
+    },
+    {
+      name: `园游会`,
+      url: `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/abb23691387702300591191776/f0.mp3`,
+    },
+    {
+      name: `霍元甲`,
+      url: `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/ae0ba44f387702300591299063/f0.mp3`,
+    },
+    {
+      name: `黑色毛衣`,
+      url: `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/abb23692387702300591191777/f0.mp3`,
+    },
+    {
       name: `卡农`,
       url: `http://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/4944b960387702298536438925/f0.m4a`,
     },
