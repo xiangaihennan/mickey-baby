@@ -13,7 +13,6 @@ import { md5 } from 'md5js'
 const randomList = musicList.sort(() => Math.random() - 0.5)
 // 生成防盗链的url
 const getUrl = (url) => {
-  console.log(url, '============url,')
   const reg = /(?<=(.+\.com))(.+)(?=(\/.+\.*))/g
   const dir = url.match(reg)[0]
   // 格式 key+dir+time
