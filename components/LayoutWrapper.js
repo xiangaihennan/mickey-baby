@@ -11,29 +11,29 @@ import { musicList, REFERERKEY } from '@/data/mediaMetaData'
 import { useMemo, useState } from 'react'
 import { md5 } from 'md5js'
 const randomList = musicList.sort(() => Math.random() - 0.5)
-// 生成防盗链的url
-const getUrl = (url) => {
-  const reg = /(?<=(.+\.com))(.+)(?=(\/.+\.*))/g
-  const dir = url.match(reg)[0]
-  // 格式 key+dir+time
-  const unixTime = Math.floor(Date.now() / 1000) + 1200
-  const timestamp = unixTime.toString(16)
-  const sign = `${REFERERKEY}${dir}/${timestamp}`
-  const signMD5 = md5(sign, 32)
-  const urlParams = `?t=${timestamp}&sign=${signMD5}`
-  const result = `${url}${urlParams}`
-  return result
-}
+
 const LayoutWrapper = ({ children }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
-
+  // 生成防盗链的url
+  const getUrl = (url) => {
+    const reg = /(?<=(.+\.com))(.+)(?=(\/.+\.*))/g
+    const dir = url.match(reg)[0]
+    // 格式 key+dir+time
+    const unixTime = Math.floor(Date.now() / 1000) + 1200
+    const timestamp = unixTime.toString(16)
+    const sign = `${REFERERKEY}${dir}/${timestamp}`
+    const signMD5 = md5(sign, 32)
+    const urlParams = `?t=${timestamp}&sign=${signMD5}`
+    const result = `${url}${urlParams}`
+    return result
+  }
   const url = useMemo(
     (params) => {
       return getUrl(randomList[currentIndex]?.url)
     },
     [currentIndex]
   )
-
+  console.log(url, '------------------------')
   const viedeoConfig = {
     autoPlay: false,
     layout: 'horizontal',
