@@ -46,9 +46,9 @@ const LayoutWrapper = ({ children }) => {
       // <div key={musicList[currentIndex]?.name}>
       //   {musicList[currentIndex]?.name}&nbsp;&nbsp;&nbsp;
       // </div>,
-      RHAP_UI.ADDITIONAL_CONTROLS,
+      // RHAP_UI.ADDITIONAL_CONTROLS,
       RHAP_UI.MAIN_CONTROLS,
-      RHAP_UI.VOLUME_CONTROLS,
+      // RHAP_UI.VOLUME_CONTROLS,
     ],
     loop: true,
     showSkipControls: true,
