@@ -16,7 +16,7 @@ const getUrl = (url) => {
   const reg = /(?<=(.+\.com))(.+)(?=(\/.+\.*))/g
   const dir = url.match(reg)[0]
   // 格式 key+dir+time
-  const unixTime = Math.floor(Date.now() / 1000)
+  const unixTime = Math.floor(Date.now() / 1000) + 1200
   const timestamp = unixTime.toString(16)
   const sign = `${REFERERKEY}${dir}/${timestamp}`
   const signMD5 = md5(sign, 32)
