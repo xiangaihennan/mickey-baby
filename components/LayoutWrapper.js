@@ -8,12 +8,13 @@ import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player'
 import { musicList, REFERERKEY } from '@/data/mediaMetaData'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { md5 } from 'md5js'
 const randomList = musicList.sort(() => Math.random() - 0.5)
 
 const LayoutWrapper = ({ children }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [audioPlayerSrc, setAudioPlayerSrc] = useState('')
   // 生成防盗链的url
   const getUrl = (url) => {
     const reg = /(?<=(.+\.com))(.+)(?=(\/.+\.*))/g
@@ -27,13 +28,6 @@ const LayoutWrapper = ({ children }) => {
     const result = `${url}${urlParams}`
     return result
   }
-  const url = useMemo(
-    (params) => {
-      return getUrl(randomList[currentIndex]?.url)
-    },
-    [currentIndex]
-  )
-  console.log(url, '------------------------')
   const viedeoConfig = {
     autoPlay: false,
     layout: 'horizontal',
@@ -42,7 +36,6 @@ const LayoutWrapper = ({ children }) => {
       boxShadow: 'none',
       backgroundColor: 'transparent',
     },
-    preload: 'none',
     customControlsSection: [
       // <div key={musicList[currentIndex]?.name}>
       //   {musicList[currentIndex]?.name}&nbsp;&nbsp;&nbsp;
@@ -54,18 +47,22 @@ const LayoutWrapper = ({ children }) => {
     loop: true,
     showSkipControls: true,
     className: `bg-transparent`,
-    src: url,
-    // REFERERKEY
     onPlay: (e) => {
-      console.log(currentIndex, e, 'preIndex')
+      // console.log(currentIndex, e, 'preIndex')
     },
     onClickPrevious: (ev) => {
       setCurrentIndex((x) => (x - 1 + randomList.length) % randomList.length)
     },
     onClickNext: (ev) => {
-      setCurrentIndex((x) => (x > randomList.length - 1 ? 0 : x + 1))
+      setCurrentIndex((x) => (x + 1) % randomList.length)
     },
   }
+  useEffect(
+    (params) => {
+      setAudioPlayerSrc(getUrl(randomList[currentIndex]?.url))
+    },
+    [currentIndex]
+  )
   return (
     <SectionContainer>
       <div className="flex flex-col justify-between h-screen">
@@ -104,7 +101,7 @@ const LayoutWrapper = ({ children }) => {
           </div>
         </header>
         {/* <div className="hidden"> */}
-        <AudioPlayer {...viedeoConfig}></AudioPlayer>
+        <AudioPlayer {...viedeoConfig} src={audioPlayerSrc}></AudioPlayer>
         {/* </div> */}
         <main className="mb-auto">{children}</main>
         <Footer />

@@ -152,10 +152,10 @@ export const musicList = [
     name: `园游会`,
     url: `https://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/abb23691387702300591191776/f0.mp3`,
   },
-  {
-    name: `霍元甲`,
-    url: `https://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/ae0ba44f387702300591299063/f0.mp3`,
-  },
+  // {
+  //   name: `霍元甲`,
+  //   url: `https://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/ae0ba44f387702300591299063/f0.mp3`,
+  // },
   {
     name: `黑色毛衣`,
     url: `https://1259397000.vod2.myqcloud.com/68dd9606vodcq1259397000/abb23692387702300591191777/f0.mp3`,
