@@ -35,13 +35,14 @@ const LayoutWrapper = ({ children }) => {
   )
 
   const viedeoConfig = {
-    autoPlay: true,
+    autoPlay: false,
     layout: 'horizontal',
     style: {
       border: 0,
       boxShadow: 'none',
       backgroundColor: 'transparent',
     },
+    preload: 'none',
     customControlsSection: [
       // <div key={musicList[currentIndex]?.name}>
       //   {musicList[currentIndex]?.name}&nbsp;&nbsp;&nbsp;
