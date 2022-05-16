@@ -15,10 +15,11 @@ const randomList = musicList.sort(() => Math.random() - 0.5)
 const LayoutWrapper = ({ children }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [audioPlayerSrc, setAudioPlayerSrc] = useState('')
+
   // 生成防盗链的url
   const getUrl = (url) => {
     const reg = /(?<=(.+\.com))(.+)(?=(\/.+\.*))/g
-    const dir = url.match(reg)[0]
+    const [dir] = url.match(reg)
     // 格式 key+dir+time
     const unixTime = Math.floor(Date.now() / 1000) + 1200
     const timestamp = unixTime.toString(16)
@@ -29,7 +30,7 @@ const LayoutWrapper = ({ children }) => {
     return result
   }
   const viedeoConfig = {
-    autoPlay: false,
+    autoPlay: true,
     layout: 'horizontal',
     style: {
       border: 0,
@@ -44,11 +45,14 @@ const LayoutWrapper = ({ children }) => {
       RHAP_UI.MAIN_CONTROLS,
       // RHAP_UI.VOLUME_CONTROLS,
     ],
-    loop: true,
+    loop: false,
     showSkipControls: true,
     className: `bg-transparent`,
+    onEnded: (e) => {
+      setCurrentIndex((x) => (x - 1 + randomList.length) % randomList.length)
+    },
     onPlay: (e) => {
-      // console.log(currentIndex, e, 'preIndex')
+      console.log(currentIndex, e, 'preIndex')
     },
     onClickPrevious: (ev) => {
       setCurrentIndex((x) => (x - 1 + randomList.length) % randomList.length)
