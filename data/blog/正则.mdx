@@ -43,11 +43,11 @@ console.log(re.test(text)); // true
 ```js:向前查找断言（查找某个规则前的）
 
 const text = 'foobar';
-// `肯定式向前查找` 查找bar前面的foo 不包含bar
+// `肯定式向前查找` 匹配bar前面的foo
 const barFrontRegT = /foo(?=bar)/
 console.log(barFrontRegT.exec(text)) // ['foo', index: 0, input: 'foobar', groups: undefined]
 
-// `否定式向前查找` 匹配不是foo后面不是bar的规则 （符合返回foo）
+// `否定式向前查找` 匹配除了bar 前面的foo
 const barFrontRegF = /foo(?!bar)/
 console.log(bazFrontRegF.exec(text)) // ['foo', index: 0, input: 'foobar', groups: undefined]
 
@@ -57,14 +57,14 @@ console.log(bazFrontRegF.exec(text)) // ['foo', index: 0, input: 'foobar', group
 
 ```js:向后查找断言（查找某个规则后的）
 const text = 'foobar';
-// `肯定式向后查找` 查找foo后面的bar 不包含bar
+// `肯定式向后查找` 查找foo后面的bar
 const fooBehindT = /(?<=foo)bar/
 console.log(barBehindT.exec(text)) // ['bar', index: 0, input: 'foobar', groups: undefined]
 
-// `否定式向后查找` 匹配不是bar前面不是foo的规则 （符合返回bar）
+// `否定式向后查找` 匹配除了foo后面的bar （符合返回bar）
 
 const fooBehindF = /(?<!foo)bar/
-console.log(fooBehindF.exec(text)) // ['bar', index: 0, input: 'foobar', groups: undefined]
+console.log(fooBehindF.exec(text)) // null  因为字符串bar的前面是foo
 
 
 
@@ -95,7 +95,7 @@ const regex = /(?!^)(?=(\d{3})+(\.|$))/g;
 
 
 先行断言、后行断言规律：
-1.'<'号代表 要匹配的内容在后     匹配内容在前
+1.'<'号代表 要匹配的内容在后
 2.'='代表匹配是xxx的，'!'代表不是xxx的规则
 🌰：(?<=123)xx(?=234) 匹配前面是123后面是234的xx
 🌰：(?<!123)xx(?!234) 匹配前面不是123后面不是234的xx
