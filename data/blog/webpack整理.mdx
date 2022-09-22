@@ -1,0 +1,369 @@
+---
+title: webpack内容整理
+date: '2022-9-2'
+tags: ['webpack']
+draft: false
+summary: 'webpack知识回顾'
+---
+
+<TOCInline toc={props.toc} exclude="Overview" asDisclosure />
+`以下内容参考官方文档`
+
+## 资源管理
+
+在 module 设置 rules 选择 loader 或者 parse 方式解析
+
+```js: 资源管理配置
+//webpack.config.js
+ const path = require('path');
+
+ module.exports = {
+   entry: './src/index.js',
+   output: {
+     filename: 'bundle.js',
+     path: path.resolve(__dirname, 'dist'),
+   },
+  module: {
+    rules: [
+        // 加载css
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
+        // 加载图片
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+      },
+        // 加载font字体
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+      },
+      // 加载数据文件csv、xml、
+      {
+        test: /\.(csv|tsv)$/i,
+        use: ['csv-loader'],
+      },
+      {
+        test: /\.xml$/i,
+        use: ['xml-loader'],
+      },
+      // 加载toml，yamljs 和 json5
+    //   npm install toml yamljs json5 --save-dev
+      {
+        test: /\.toml$/i,
+        type: 'json',
+        parser: {
+          parse: toml.parse,
+        },
+      },
+      {
+        test: /\.yaml$/i,
+        type: 'json',
+        parser: {
+          parse: yaml.parse,
+        },
+      },
+      {
+        test: /\.json5$/i,
+        type: 'json',
+        parser: {
+          parse: json5.parse,
+        },
+      },
+    ],
+  },
+ };
+```
+
+## 管理输出 自动引入打包文件
+
+```js: 配置htmlwebpacklugin
+/// webpack.config.js
+ const path = require('path');
+ const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+ module.exports = {
+   entry: {
+     index: './src/index.js',
+     print: './src/print.js',
+   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: '管理输出',
+    }),
+  ],
+   output: {
+     filename: '[name].bundle.js',
+     path: path.resolve(__dirname, 'dist'),
+   },
+ };
+
+```
+
+## 开发环境配置
+
+webpack 提供以下三种可选方式`（多数情况使用 webpack-dev-server）`
+
+- webpack's Watch Mode
+- webpack-dev-server
+- webpack-dev-middleware
+
+source map `定位代码问题`
+
+devtool 此选项控制是否生成，以及如何生成 source map。
+[devtools 所有规则](https://webpack.docschina.org/configuration/devtool/#devtool)
+
+## 代码分离 `重点` （优化手段）
+
+常用的代码分离方法：
+
+    - 入口起点：使用 entry 配置手动地分离代码。 （不推荐）
+        会加载重复资源
+    - 防止重复：使用 CommonsChunkPlugin 去重和分离 chunk。
+      - 使用shared配置公用依赖。
+      - SplitChunksPlugin插件。
+    - 动态导入：通过模块的内联函数调用来分离代码。
+      - 通过es6的import()语法实现。
+      - 使用 webpack 特定的 require.ensure。
+    - 预获取
+      ```
+      import(/* webpackPrefetch: true */ './path/to/LoginModal.js');
+      webpack会生成<link rel="prefetch" href="login-modal-chunk.js"> 这会生成 <link rel="prefetch" href="login-modal-chunk.js"> 并追加到页面头部，指示着浏览器在闲置时间预取 login-modal-chunk.js 文件。
+      ```
+    - 代码分析
+      https://webpack.docschina.org/guides/code-splitting/#bundle-analysis
+
+## 缓存
+
+    将第三方库(library)（例如 lodash 或 react）提取到单独的 vendor chunk 文件中
+    https://webpack.docschina.org/guides/caching/
+
+    1、固定文件名设置http请求头为可缓存
+    2、业务代码动态生成[contenthash]文件名，让浏览器每次重新加载
+
+## 创建 library
+
+- 打包后兼容各种模块方案引入
+
+```js:
+  const path = require('path');
+
+  module.exports = {
+   entry: './src/index.js',
+   output: {
+     path: path.resolve(__dirname, 'dist'),
+     filename: 'webpack-numbers.js',
+   // - library: 'webpackNumbers',
+   + library: {
+      name: 'webpackNumbers',// 包名
+      type: 'umd', // 打包方式
+    },
+   },
+ };
+```
+
+- 外部化 lodash
+
+目的：开发的包依赖第三方模块，打包时排除第三方模块代码，减少体积
+
+```js:
+  const path = require('path');
+  module.exports = {
+    entry: './src/index.js',
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'webpack-numbers.js',
+      library: {
+        name: "webpackNumbers",
+        type: "umd"
+      },
+    },
+    // 打包时排除使用的第三方模块
+   externals: {
+     lodash: {
+       commonjs: 'lodash',
+       commonjs2: 'lodash',
+       amd: 'lodash',
+       root: '_', // 全局可访问的变量名
+     },
+   },
+  };
+```
+
+> Tips: 在 webpack4 的项目中使用 webpack5 发布的模块 需要添加插件 NodePolyfillPlugin 到 plugins
+
+## 环境变量
+
+```shell:
+npx webpack --env xx=xx xxx=xxx
+```
+
+- 访问环境变量需要将 webpack.config.js 导出配置 写成函数 通过形参来接收环境变量
+
+通过 DefinePlugin 插件 可以定义
+
+```
+在为 process 定义值时:
+'process.env.NODE_ENV': JSON.stringify('production')会比
+ process: { env: { NODE_ENV: JSON.stringify('production') } } 更好，
+后者会覆盖 process 对象，这可能会破坏与某些模块的兼容性，因为这些模块会在 process 对象上定义其他值。
+```
+
+## 构建性能 （重点！）
+
+[官方构建优化方法](https://webpack.docschina.org/guides/build-performance/#general)
+
+## 内容安全策略
+
+- 每个页面的入口文件配置 **webpack_nonce**（格式为 base64 编码的字符串）变量
+
+- 启用 csp 在 head 标签添加
+
+```
+ <meta http-equiv="Content-Security-Policy" ...>
+```
+
+## 模块热替换
+
+1. 安装 webpack-dev-server
+2. 配置 hot 属性唯 true
+
+```js:添加需要热更新的文件
+ if (module.hot) {
+   module.hot.accept('./print.js', function() {
+     console.log('Accepting the updated printMe module!');
+     printMe();
+   })
+ }
+```
+
+3. css 热更新需要安装 style-loader 和 css-loader
+
+```js:
+   module: {
+     rules: [
+       {
+         test: /\.css$/,
+         use: ['style-loader', 'css-loader'],
+       },
+     ],
+   },
+```
+
+## Tree Shaking
+
+- 通过 package.json 的 "sideEffects" 属性（推荐）
+
+```js:package.json配置
+
+{
+  "name": "your-project",
+  "sideEffects": false
+}
+```
+
+如果所有代码都不包含副作用，我们就可以简单地将该属性标记为 false，来告知 webpack 删除未用到的 export。
+
+如果代码中确实有不需要删除的片段，可以设置 sideEffects 为一个数组
+此数组支持简单的 glob 模式匹配相关文件。其内部使用了 [glob-to-regexp](https://github.com/fitzgen/glob-to-regexp)`（支持：_，\*\*，{a,b}，[a-z]）。`如果匹配模式为 _.css，且不包含 /，将被视为 \*_/\_.css。
+
+```js:
+{
+  "name": "your-project",
+  "sideEffects": ["./src/some-side-effectful-file.js", "*.css"]
+}
+```
+
+你可以将应用程序想象成一棵树。绿色表示实际用到的 source code(源码) 和 library(库)，是树上活的树叶。灰色表示未引用代码，是秋天树上枯萎的树叶。为了除去死去的树叶，你必须摇动这棵树，使它们落下。
+
+> 为了利用 treeshaking 要使用 es2015 模块语法 import 和 export
+
+## 懒加载
+
+```js:懒加载方法
+   import _ from 'lodash';
+   const button = document.createElement('button');
+   // 点击时才加载lodash
+   button.onclick = e => import(/* webpackChunkName: "print" */ './print').then(module => {
+     const print = module.default;
+     print();
+   });
+```
+
+> webpack 核心是通过 import()函数来实现 前端框架都有自己的懒加载实现
+
+## 预置依赖
+
+webpack.ProvidePlugin 插件
+
+```js:webpack.config.js
+ const path = require('path');
+ const webpack = require('webpack');
+
+ module.exports = {
+   entry: './src/index.js',
+   output: {
+     filename: 'main.js',
+     path: path.resolve(__dirname, 'dist'),
+   },
+  plugins: [
+    // 如果构建过程遇到_ 请将lodash package引入进来
+    new webpack.ProvidePlugin({
+      _: 'lodash',
+    }),
+  ],
+ };
+
+```
+
+## TS
+
+- 安装 ts-loader
+
+```js:webpack.config.js
+const path = require('path');
+// 配置入口，通过ts-loader解析所有ts tsx文件
+module.exports = {
+  entry: './src/index.ts',
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+  },
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+};
+```
+
+- ts 开启 sourceMaps
+
+```ts:tsconfig.json
+  {
+    "compilerOptions": {
+      "outDir": "./dist/",
+     "sourceMap": true,
+      "noImplicitAny": true,
+      "module": "commonjs",
+      "target": "es5",
+      "jsx": "react",
+      "allowJs": true,
+      "moduleResolution": "node",
+    }
+  }
+```
+
+- 使用第三方类库
+
+安装第三方库，需要从 [typesearch](https://www.typescriptlang.org/dt/search/) 中安装对应的类型声明文件
+

@@ -50,7 +50,7 @@ const Giscus = ({ mapping }) => {
     <div className="pt-6 pb-6 text-center text-gray-700 dark:text-gray-300">
       {enableLoadComments && (
         <button className="" onClick={LoadComments}>
-          加载评论。。。
+          load more
           <span role="img" aria-describedby aria-label>
             🤔
           </span>
