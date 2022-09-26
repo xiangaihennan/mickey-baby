@@ -2039,11 +2039,6 @@
   "resolved" "https://registry.npmjs.org/camelcase/-/camelcase-6.2.0.tgz"
   "version" "6.2.0"
 
-"caniuse-lite@^1.0.30001202", "caniuse-lite@^1.0.30001219", "caniuse-lite@^1.0.30001228", "caniuse-lite@^1.0.30001243", "caniuse-lite@^1.0.30001248":
-  "integrity" "sha512-4vQ90tMKS+FkvuVWS5/QY1+d805ODxZiKFzsU8o/RsVJz49ZSRR8EjykLJbqhzdPgadbX6wB538wOzle3JniRA=="
-  "resolved" "https://registry.npm.bg.huohua.cn/caniuse-lite/-/caniuse-lite-1.0.30001399.tgz"
-  "version" "1.0.30001399"
-
 "ccount@^2.0.0":
   "integrity" "sha512-VOR0NWFYX65n9gELQdcpqsie5L5ihBXuZGAgaPEp/U7IOSjnPMEH6geE+2f6lcekaNEfWzAHS45mPvSo5bqsUA=="
   "resolved" "https://registry.npmjs.org/ccount/-/ccount-2.0.0.tgz"
