@@ -45,9 +45,7 @@ export async function getStaticProps({ params }) {
 }
 // 详情页面
 export default function HiphopPage({ videos, authorDetails, prev, next }) {
-  // TODO --------------
   const { mdxSource, toc, frontMatter } = videos
-  // console.log(frontMatter, '999999999999999999999')
   return (
     <>
       {frontMatter.draft !== true ? (

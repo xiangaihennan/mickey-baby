@@ -8,7 +8,6 @@ import VideoCard from '@/components/VideoCard'
 
 export default function ListLayout({ videos, title, initialDisplayPosts = [], pagination }) {
   console.log(videos, initialDisplayPosts, '------------')
-  // TODO 滚动功能 上下页
   return (
     <>
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
