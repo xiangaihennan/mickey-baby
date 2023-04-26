@@ -1,0 +1,55 @@
+---
+title: designable项目
+date: '2023-4-27'
+tags: []
+draft: false
+summary: ''
+---
+
+<TOCInline toc={props.toc} exclude="Overview" asDisclosure />
+
+## 添加组件
+
+> 表单设计器的基本应用其实就三个块，即左侧组件区域，中间组件呈现区域，右侧组件设置区域。表单设计器使用了 Formily 的表单方案为右侧配置实现，更重要的是都是基于 JSONSCHEMA 的，这样大家就好理解。
+
+- 组件区域（左侧），表单设计器所需要的组件同样需要桥接才能在表单设计器使用，但是这个桥接更多的是使用 json 描述然后让表单设计器能够接收组件而非指的是功能，即一个 Formily 组件需要用一些包装（json 描述）才能在设计器展现，但是这里的包装和将一个组件包装成 Formily 组件毫无关系。下面是包装一个组件到表单设计器
+
+```js:🌰
+import React from 'react'
+import { ComTest as FormilyTest } from './Template.js'
+import { createBehavior, createResource } from '@designable/core'
+import { DnFC } from '@designable/react'
+import { createFieldSchema } from '../../components/Field'
+import { AllSchemas } from '../../schemas'
+import { AllLocales } from '../../locales'
+
+export const ComTest: DnFC<React.ComponentProps<typeof FormilyTest>> = FormilyTest
+//组件行为
+ComTest.Behavior = createBehavior({
+  name: 'ComTest',
+  extends: ['Field'],
+  selector: (node) => node?.props['x-component'] === 'ComTest', 这里必须和组件名字一样
+  designerProps: {
+    propsSchema: createFieldSchema(AllSchemas.ComTest), // 这里是scheam创建右侧的配置项
+  },
+  designerLocales: AllLocales.ComTest, // 这里是国际化文本的配置
+})
+// 这里对应组件在左侧的表现
+ComTest.Resource = createResource({
+  icon: 'SelectSource',
+  elements: [
+    {
+      componentName: 'Field',
+      props: {
+        title: 'ComTest',
+        'x-decorator': 'FormItem',
+        'x-component': 'ComTest',
+      },
+    },
+  ],
+})
+
+
+```
+
+`Resource 定义了组件在表单设计器中的外观，而 Behavior 定义了用户在使用组件时可以进行的配置选项。 AllSchemas.ComTest 是一组数据结构，用于描述用户在表单设计器中选择组件时可以配置的属性。 这些属性的值会被传递给组件，以便组件使用这些值来实现其功能。 因此，AllSchemas.Select 中的配置是为了让组件能够使用这些数据，而非直接配置组件本身。`
