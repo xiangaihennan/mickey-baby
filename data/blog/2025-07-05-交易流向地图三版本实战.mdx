@@ -1,0 +1,54 @@
+---
+title: '交易流向可视化：从高德到底层 ECharts 的演化'
+date: '2025-07-05'
+tags: ['ECharts', '地图', '可视化']
+draft: false
+summary: '记录危化品交易流向地图在三阶段的演进，并提炼 convertDataToEChartsOptions、handleOverlappingLines、地图层级切换等关键算法。'
+---
+
+监管项目要求我们把全省危化品企业的交易流向实时展示在大屏。上线节奏紧、预算有限又要满足政府合规，我把地图建设拆成 **高德 → 天地图 → ECharts+GeoJSON** 三个阶段。下面按照“背景 → 方案 → 算法”梳理整个过程，方便未来复用。
+
+## 阶段一：高德底图（上线兜底）
+
+- 首版直接使用高德企业版地图 API：底图、覆盖物、流向图层都沿用官方能力，仅调整样式满足设计稿。优势是上线快，劣势是 license 费（5 万/年）高且受制于公网。
+
+## 阶段二：天地图瓦片（合规切换）
+
+- 项目属于政府系统，需要使用天地图。我把底图换成天地图瓦片，再用 ECharts 的 `lines`、`scatter`、`effectScatter` 渲染流向、终点与起点。配合渐变区域与统一的 label，解决了天地图原本线条粗糙的问题。
+
+## 阶段三：ECharts + 天地图 GeoJSON（体验强化）
+
+- 最新版本直接加载天地图官方 GeoJSON（省、市、县）到 ECharts `geo`，不再依赖瓦片。`MAP_LEVEL_CONFIG` 用于约束多层级：每个层级对应 `mapName`、缩放范围、边界宽度、标签显隐和初始缩放。
+- `resolveMapLevelByZoom` 通过 `georoam` 事件实时感知当前 zoom，并在 `CITY_ZOOM_THRESHOLD / COUNTY_ZOOM_THRESHOLD` 之间切换省、市、县，保证放大时自动切换细粒度地图。
+
+## convertDataToEChartsOptions：一次性完成数据、样式与交互
+
+核心函数 `convertDataToEChartsOptions(apiData)` 做了三件事：
+
+1. **GeoJSON 拆解**：把 API 返回的 `start_point`、`finish_point`、`line` FeatureCollection 解析成 startData/endData/lineData，读取属性赋值企业信息。
+2. **层级样式策略**：根据当前 `mapLevel`（省/市/县）设定线宽、透明度、点大小、标签字体等，确保“看大图时不过度抢眼、放大后细节足够”。
+3. **线条重叠处理**：把原始线路丢给 `handleOverlappingLines` 去拆分重合线，再将结果映射到 `series.lines` 的 `lineStyle` 与 `effect`。
+
+函数返回 `{ options, hasData }`，由 ReactECharts 的 `setOption` 直接消费，便于复用。
+
+## handleOverlappingLines：同起终点的线也能看清
+
+该算法解决“同一对企业有多条交易线条时叠在一起”的问题，核心步骤：
+
+1. **分组**：把每条线的起点、终点坐标归一化后拼成 `coordKey`，用 Map 进行聚类，保持方向性（A→B 与 B→A 不合并）。
+2. **弧度均分**：单条线赋最小弧度 0.1，多条线则在 -0.8~0.8 之间均匀分布，通过 `lineIndex` 计算偏移，确保每条线都有独特弧度。
+3. **视觉权重**：按索引调节 `opacity`、`lineWidth`，让“核心线路”更醒目，同时把调试信息写进 `_meta` 便于排查。
+
+最终生成的 lineData 被直接映射到 `series.lines`，再结合 `effect.trailLength`、`lineStyle.cap/join`，整体看起来像扇形展开的交易羽毛。
+
+## Tooltip 与详情链路
+
+- Tooltip 判断 `componentSubType === 'lines'` 后，提取属性中的企业、地址、文档 ID，按入库/出库/中转三个类型插入不同的 HTML 模块，并借助 `getAreaNamesByCode` 逆向查询区域名称。
+- 线条点击事件结合节流与 `getInboundDetail/getOutboundDetail/getTransitDetail` 请求，点击后打开专属弹窗，实现“地图 → 单据详情”的闭环。
+
+## 交互与状态同步
+
+- `georoam` 事件实时写入当前中心点与缩放，`full_status`（全屏）切换时会重新渲染目标布局并调用 `echarts.resize()`。
+- 筛选条件（企业、化学品、经营方式、时间、部门、单据类型）统一由 `Form` 控制，所有值存在 `formParams` 和 `useState` 中，变化后触发 `loadData`，并通过 `hasData` 指示“暂无数据/加载失败”的状态 UI。
+
+通过这套演化路径与算法封装，我们在半年内完成了从商业地图到自定义 GeoJSON 的切换，并且保持了数据、交互、样式的一致性。未来只要接口数据结构不变，就能继续迭代图层或接入新的分析模块，而无需重新搭建底图栈。***

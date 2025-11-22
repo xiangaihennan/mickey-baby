@@ -1,0 +1,33 @@
+---
+title: 'Cypress 里如何把 Token 带到底：从注册到全站回归'
+date: '2025-11-08'
+tags: ['Cypress', 'E2E测试', '认证']
+draft: false
+summary: '虽然只覆盖注册与登录两个入口，但我把鉴权 Token 的注入、续期与多页面联动走通，为后续自动化打下基础。'
+---
+
+为博客和服务平台建立 UI 自动化时，我先把“注册 + 登录”这条最核心的链路写透。目标是：测试用例从入口页开始，拿到 Token 后能够继续访问任意业务页面，而不需要在每个用例里重复登录。
+
+### Token 获取与注入
+
+1. 使用自定义命令 `cy.register()`、`cy.login()` 去调用真实接口，并在成功后持久化 Token。
+2. 将 Token 写入 `localStorage` 与 `Authorization` 头部，保持与生产环境一致。
+3. 对于多域名（如主站与管理后台），利用 `cy.origin` 在不同域之间同步凭证。
+
+```js
+Cypress.Commands.add('loginAndCache', () => {
+  cy.request('POST', '/api/login', creds).then(({ body }) => {
+    window.localStorage.setItem('token', body.token)
+    Cypress.env('authToken', body.token)
+  })
+})
+```
+
+### 用例组织
+
+- 把注册与登录放在 `before` 钩子中执行一次，后续所有 `it` 块仅关注业务场景（如跳转到“危化品列表”页面、校验地图流向组件是否加载成功）。
+- 引入 `cy.session` 缓存会话，确保在 CI 上重复利用 Token，同时配合 `cy.intercept` 断言认证头是否带上。
+
+### 结果
+
+虽然目前只覆盖了注册和登录两个页面，但凭借 Token 透传机制，我能快速复制脚本去覆盖其他模块。随着组件继续拆分，我们可以把更多业务场景纳入回归，而且无需担心“进入系统”的步骤再次拖慢节奏。

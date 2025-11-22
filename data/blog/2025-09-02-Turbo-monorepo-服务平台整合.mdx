@@ -1,0 +1,36 @@
+---
+title: '用 Turborepo 整合服务平台前后台：Monorepo 的落地细节'
+date: '2025-09-02'
+tags: ['Monorepo', 'Turborepo', '工程化']
+draft: false
+summary: '分享如何把服务平台的前台（Next.js）与后台（Node/Koa）迁入同一个 Monorepo，并解决依赖、构建与权限隔离问题。'
+---
+
+过去一年，前台和后台分别在两个仓库迭代，导致接口契约、lint 规则和脚本经常打架。三月份我开始推动 Turborepo 方案：将应用拆分为 `apps/web`、`apps/admin`、`apps/api`，通用模块放入 `packages/*`，统一在根目录管理依赖与流水线。
+
+### 目录与依赖策略
+
+- `apps/web`：现有 Next.js 站点，使用 Tailwind。
+- `apps/api`：Koa + Prisma，负责服务平台开放接口。
+- `packages/ui`、`packages/config`：共享 UI 组件与 ESLint/TSConfig。
+
+通过 `pnpm` 的 workspace 协议管理依赖，结合 Turborepo 的 `pipeline` 配置确保 `build` 会在 `lint` 之后执行，并根据 `dependsOn` 精准触发增量构建。
+
+```json
+{
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    }
+  }
+}
+```
+
+### 权限与发布
+
+- 采用 `git sparse-checkout` + `CODEOWNERS` 控制敏感服务，仅有 API 小组对 `apps/api` 有写权限。
+- 发布阶段把 web、api 分别打包成 Docker 镜像，但利用 Turborepo 生成的缓存层复用依赖。
+- Storybook、OpenAPI 文档等统一由 root 脚本生成，避免多份脚本维护。
+
+迁移完成后，跨端联调效率明显提升：组件库发布一次即可被前后台同时升级；同时也为后续加入 Electron 客户端预留了空间。

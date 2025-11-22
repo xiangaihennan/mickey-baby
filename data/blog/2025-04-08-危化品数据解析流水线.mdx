@@ -1,0 +1,36 @@
+---
+title: '把 Word 危化品数据喂给后端：一条纯 Python 的解析流水线'
+date: '2025-04-08'
+tags: ['Python', '数据治理', 'docx']
+draft: false
+summary: '记录如何利用 python-docx、pydantic 与正则把成百上千份危化品 Word 模板清洗成后端接口可直接消费的 JSON。'
+---
+
+项目上线前，安监部门给到的是一批格式各异的 Word 文档：有的用并排表，有的直接把品名写在段落里，字段还混用了中文冒号与英文冒号。如果靠人工录入，至少需要 2-3 周。于是我写了一条纯 Python 流水线，把所有文档清洗为结构化 JSON，再由后端存入 Mongo。
+
+### 解析策略
+
+1. 使用 `python-docx` 遍历段落与表格，基于标题层级自动切换解析器，避免硬编码索引。
+2. 通过 `re` 模块构建一组命名捕获（例如 `(?P<cas>CAS[:：]?(?P<value>[\d-]+))`）来抽取 CAS、危化等级等字段。
+3. 用 `pydantic` 定义 `HazardMaterial` 模型，对输入做强约束（枚举、数值范围），同时自动补全缺省字段。
+
+```python
+from docx import Document
+from models import HazardMaterial
+
+def parse_docx(path: str) -> list[HazardMaterial]:
+    doc = Document(path)
+    context = {}
+    for block in iterate_blocks(doc):
+        context.update(extract_fields(block))
+    return HazardMaterial.parse_obj(context)
+```
+
+### 数据校验与导出
+
+清洗过程中我增加了两道校验：
+
+- **引用一致性**：同一份文档中出现的品名必须唯一，检测到冲突就写入 `error.log`。
+- **单位标准化**：浓度字段自动转换为 mg/m³，避免前端还要做二次转换。
+
+最终产出的 JSON 按照接口约定分为 `baseInfo`、`riskLevel`、`storage` 三段，后端只需 `bulkWrite` 即可落库。整批 600+ 份文档在 20 分钟内就完成解析，大幅压缩了交付周期。
