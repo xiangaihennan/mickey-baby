@@ -8,13 +8,13 @@ import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player'
 import { musicList, REFERERKEY } from '@/data/mediaMetaData'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { md5 } from 'md5js'
-const randomList = musicList.sort(() => Math.random() - 0.5)
 
 const LayoutWrapper = ({ children }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [audioPlayerSrc, setAudioPlayerSrc] = useState('')
+  const currentTrack = musicList[currentIndex]
 
   // 生成防盗链的url
   const getUrl = (url) => {
@@ -29,6 +29,78 @@ const LayoutWrapper = ({ children }) => {
     const result = `${url}${urlParams}`
     return result
   }
+
+  const getRandomIndex = useCallback((excludeIndex) => {
+    if (musicList.length <= 1) return excludeIndex
+    let nextIndex = excludeIndex
+    while (nextIndex === excludeIndex) {
+      nextIndex = Math.floor(Math.random() * musicList.length)
+    }
+    return nextIndex
+  }, [])
+
+  const handleSelectTrack = useCallback((index) => {
+    setCurrentIndex(index)
+  }, [])
+
+  const handlePlayNext = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % musicList.length)
+  }, [])
+
+  const handlePlayPrev = useCallback(() => {
+    setCurrentIndex((prev) => (prev - 1 + musicList.length) % musicList.length)
+  }, [])
+
+  const handlePlayRandom = useCallback(() => {
+    setCurrentIndex((prev) => getRandomIndex(prev))
+  }, [getRandomIndex])
+
+  const playlistSelector = (
+    <select
+      key="playlist-selector"
+      className="rounded border border-gray-300 px-2 py-1 text-sm dark:border-gray-600 dark:bg-gray-800"
+      value={currentIndex}
+      onChange={(e) => handleSelectTrack(Number(e.target.value))}
+    >
+      {musicList.map((track, index) => (
+        <option key={track.name} value={index}>
+          {track.name}
+        </option>
+      ))}
+    </select>
+  )
+
+  const customControls = [
+    <span key="current-track" className="text-sm text-gray-700 dark:text-gray-200">
+      正在播放：{currentTrack?.name ?? '-'}
+    </span>,
+    <button
+      key="prev-btn"
+      onClick={handlePlayPrev}
+      className="rounded border border-gray-300 px-2 py-1 text-sm text-gray-700 transition hover:border-primary-400 hover:text-primary-500 dark:border-gray-600 dark:text-gray-200 dark:hover:border-primary-400"
+      type="button"
+    >
+      上一首
+    </button>,
+    <button
+      key="next-btn"
+      onClick={handlePlayNext}
+      className="rounded border border-gray-300 px-2 py-1 text-sm text-gray-700 transition hover:border-primary-400 hover:text-primary-500 dark:border-gray-600 dark:text-gray-200 dark:hover:border-primary-400"
+      type="button"
+    >
+      下一首
+    </button>,
+    <button
+      key="random-btn"
+      onClick={handlePlayRandom}
+      className="rounded border border-gray-300 px-2 py-1 text-sm text-gray-700 transition hover:border-primary-400 hover:text-primary-500 dark:border-gray-600 dark:text-gray-200 dark:hover:border-primary-400"
+      type="button"
+    >
+      随机
+    </button>,
+    playlistSelector,
+  ]
+
   const viedeoConfig = {
     autoPlay: true,
     layout: 'horizontal',
@@ -45,27 +117,27 @@ const LayoutWrapper = ({ children }) => {
       RHAP_UI.MAIN_CONTROLS,
       // RHAP_UI.VOLUME_CONTROLS,
     ],
+    customAdditionalControls: customControls,
     loop: false,
     showSkipControls: true,
     className: `bg-transparent`,
-    onEnded: (e) => {
-      setCurrentIndex((x) => (x - 1 + randomList.length) % randomList.length)
+    onEnded: () => {
+      handlePlayNext()
     },
-    onPlay: (e) => {
-      console.log(currentIndex, e, 'preIndex')
+    onClickPrevious: () => {
+      handlePlayPrev()
     },
-    onClickPrevious: (ev) => {
-      setCurrentIndex((x) => (x - 1 + randomList.length) % randomList.length)
-    },
-    onClickNext: (ev) => {
-      setCurrentIndex((x) => (x + 1) % randomList.length)
+    onClickNext: () => {
+      handlePlayNext()
     },
   }
   useEffect(
     (params) => {
-      setAudioPlayerSrc(getUrl(randomList[currentIndex]?.url))
+      if (currentTrack?.url) {
+        setAudioPlayerSrc(getUrl(currentTrack.url))
+      }
     },
-    [currentIndex]
+    [currentIndex, currentTrack?.url]
   )
   return (
     <SectionContainer>
@@ -104,9 +176,7 @@ const LayoutWrapper = ({ children }) => {
             <MobileNav />
           </div>
         </header>
-        {/* <div className="hidden"> */}
         <AudioPlayer {...viedeoConfig} src={audioPlayerSrc}></AudioPlayer>
-        {/* </div> */}
         <main className="mb-auto">{children}</main>
         <Footer />
       </div>
