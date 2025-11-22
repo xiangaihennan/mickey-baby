@@ -24,7 +24,7 @@ export default function Blog({ posts, initialDisplayPosts, pagination }) {
         posts={posts}
         initialDisplayPosts={initialDisplayPosts}
         pagination={pagination}
-        title="收藏从未停止，学习仍未开始。"
+        title=""
       />
     </>
   )
