@@ -7,9 +7,11 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import Comments from '@/components/comments'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
+import useProtectedMediaUrl from '@/hooks/useProtectedMediaUrl'
 
 const HiphopLayout = ({ frontMatter, authorDetails, next, prev, children }) => {
   const { slug, fileName, date, title, tags, mediaLink } = frontMatter
+  const secureVideoSrc = useProtectedMediaUrl(mediaLink)
   return (
     <SectionContainer>
       <BlogSEO
@@ -39,7 +41,7 @@ const HiphopLayout = ({ frontMatter, authorDetails, next, prev, children }) => {
           >
             <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:pb-0 xl:col-span-3 xl:row-span-2">
               <div className="pt-10 pb-8 prose dark:prose-dark max-w-none">{children}</div>
-              <video controls="controls" src={frontMatter?.mediaLink}>
+              <video controls="controls" src={secureVideoSrc || ''}>
                 <track kind="captions" src="subs_chi.srt" srcLang="zh" label="Chinese"></track>
               </video>
               <Comments frontMatter={frontMatter} />

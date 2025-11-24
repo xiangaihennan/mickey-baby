@@ -7,28 +7,14 @@ import Footer from './Footer'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player'
-import { musicList, REFERERKEY } from '@/data/mediaMetaData'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { md5 } from 'md5js'
+import { musicList } from '@/data/mediaMetaData'
+import { useCallback, useState } from 'react'
+import useProtectedMediaUrl from '@/hooks/useProtectedMediaUrl'
 
 const LayoutWrapper = ({ children }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [audioPlayerSrc, setAudioPlayerSrc] = useState('')
   const currentTrack = musicList[currentIndex]
-
-  // 生成防盗链的url
-  const getUrl = (url) => {
-    const reg = /(?<=(.+\.com))(.+)(?=(\/.+\.*))/g
-    const [dir] = url.match(reg)
-    // 格式 key+dir+time
-    const unixTime = Math.floor(Date.now() / 1000) + 1200
-    const timestamp = unixTime.toString(16)
-    const sign = `${REFERERKEY}${dir}/${timestamp}`
-    const signMD5 = md5(sign, 32)
-    const urlParams = `?t=${timestamp}&sign=${signMD5}`
-    const result = `${url}${urlParams}`
-    return result
-  }
+  const audioPlayerSrc = useProtectedMediaUrl(currentTrack?.url)
 
   const getRandomIndex = useCallback((excludeIndex) => {
     if (musicList.length <= 1) return excludeIndex
@@ -131,14 +117,6 @@ const LayoutWrapper = ({ children }) => {
       handlePlayNext()
     },
   }
-  useEffect(
-    (params) => {
-      if (currentTrack?.url) {
-        setAudioPlayerSrc(getUrl(currentTrack.url))
-      }
-    },
-    [currentIndex, currentTrack?.url]
-  )
   return (
     <SectionContainer>
       <div className="flex flex-col justify-between h-screen">
