@@ -2,7 +2,7 @@
 name: 捕鱼达人🤨
 avatar: /static/images/resume/xiaoshuai.jpg
 occupation: FE
-company: 火花思维
+company: 泰和
 email: 405059000@qq.com
 qqid: 405059000
 qq: //message/?uin=405059000&Site=&Menu-=yes
@@ -12,4 +12,8 @@ qq: //message/?uin=405059000&Site=&Menu-=yes
 # ![简历](/static/images/resume/jianli.jpeg)
 ---
 
-慢一点。
+大家好，我是捕鱼达人，一个痴迷于打造优雅交互的前端工程师。工作重心在 React 生态和可视化体验升级，热衷把复杂需求拆成易维护的模块，并通过自动化与性能优化让界面始终保持高效顺滑。
+
+我相信扎实的基本功和稳定的交付同样重要，更乐于与团队分享经验、共同成长。
+
+如果你也对高质量前端工程、音乐、HipHop 或任何有趣的创意感兴趣，欢迎随时联系我——期待与同好们碰撞灵感火花。
