@@ -6,31 +6,159 @@ draft: false
 summary: '分享如何把服务平台的前台（Next.js）与后台（Node/Koa）迁入同一个 Monorepo，并解决依赖、构建与权限隔离问题。'
 ---
 
-过去一年，前台和后台分别在两个仓库迭代，导致接口契约、lint 规则和脚本经常打架。三月份我开始推动 Turborepo 方案：将应用拆分为 `apps/web`、`apps/admin`、`apps/api`，通用模块放入 `packages/*`，统一在根目录管理依赖与流水线。
+为了把一个 Next.js 前台和一个 Node/Koa 后台整合到统一仓库，我把原目录的配置重新整理成以下几个关键部分：仓库骨架、pnpm 工作区、Turborepo pipeline、共享包与权限隔离策略。实践中遵循「最小改动迁移 → 可复用配置沉淀 → CI/权限收敛」三个阶段，形成可复制的迁移方案。
 
-### 目录与依赖策略
+## 1. 初始盘点与目标
 
-- `apps/web`：现有 Next.js 站点，使用 Tailwind。
-- `apps/api`：Koa + Prisma，负责服务平台开放接口。
-- `packages/ui`、`packages/config`：共享 UI 组件与 ESLint/TSConfig。
+- **现状**：两个独立仓库，CI 配置分散、依赖版本不一致、共享代码只能通过 npm 私服或复制粘贴。
+- **目标**：统一依赖管理、让共享类型/工具直接 workspace 复用、打通一条构建与发布流水线，并保证前后台权限隔离。
+- **约束**：Next.js 与 Node/Koa 运行环境不同，迁移过程中需要保持独立部署能力。
 
-通过 `pnpm` 的 workspace 协议管理依赖，结合 Turborepo 的 `pipeline` 配置确保 `build` 会在 `lint` 之后执行，并根据 `dependsOn` 精准触发增量构建。
+## 2. Monorepo 骨架（整合目录）
+
+```bash
+th-monorepo/
+├── apps/
+│   ├── service-platform-fe/    # Next.js 前台
+│   └── backend-web/           # Node/Koa 后台
+├── packages/
+│   ├── shared-types/          # API/实体类型
+│   ├── shared-utils/          # 通用工具函数
+│   └── shared-ui/             # （计划）可复用组件
+├── package.json
+├── pnpm-workspace.yaml
+├── turbo.json
+├── tsconfig.base.json
+└── README.md
+```
+
+**整合动作**：
+
+1. 使用 `git subtree add --prefix=apps/<app>` 把两个仓库的历史迁入，保持独立版本线。
+2. 在根目录创建统一配置，子应用 `package.json` 仅保留特有脚本/依赖。
+3. README 同步记录结构、脚本别名、subtree 同步命令，降低新人上手成本。
+
+## 3. pnpm 工作区与 TypeScript 配置
+
+`pnpm-workspace.yaml`：
+
+```yaml
+packages:
+  - 'apps/*'
+  - 'packages/*'
+```
+
+`package.json`（核心片段）：
+
+```json
+{
+  "name": "th-monorepo",
+  "private": true,
+  "packageManager": "pnpm@10",
+  "scripts": {
+    "dev": "pnpm turbo run dev --parallel",
+    "dev:frontend": "pnpm --filter service-platform-fe dev",
+    "dev:backend": "pnpm --filter backend-web dev",
+    "build": "pnpm turbo run build",
+    "lint": "pnpm turbo run lint",
+    "type-check": "pnpm turbo run type-check"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0",
+    "typescript": "^5.5.0",
+    "@types/node": "^22.0.0"
+  }
+}
+```
+
+`tsconfig.base.json` 统一路径别名与严格模式，示例：
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@th/shared-types": ["packages/shared-types/src"],
+      "@th/shared-utils": ["packages/shared-utils/src"]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
+}
+```
+
+## 4. Turborepo Pipeline（构建/测试/开发）
 
 ```json
 {
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**", ".next/**", "build/**"]
+    },
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "type-check": {
+      "dependsOn": ["^type-check"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
     }
   }
 }
 ```
 
-### 权限与发布
+实践要点：
 
-- 采用 `git sparse-checkout` + `CODEOWNERS` 控制敏感服务，仅有 API 小组对 `apps/api` 有写权限。
-- 发布阶段把 web、api 分别打包成 Docker 镜像，但利用 Turborepo 生成的缓存层复用依赖。
-- Storybook、OpenAPI 文档等统一由 root 脚本生成，避免多份脚本维护。
+- `dependsOn: ["^build"]` 保证 shared 包先于应用构建。
+- 对 Next.js dev 命令关闭缓存，避免热更新异常。
+- CI 中通过 `pnpm turbo run lint test build --filter=...` 自动推导最小执行集。
 
-迁移完成后，跨端联调效率明显提升：组件库发布一次即可被前后台同时升级；同时也为后续加入 Electron 客户端预留了空间。
+## 5. 共享包与依赖治理
+
+- `@th/shared-types`：沉淀 API Response、用户实体、分页等类型，应用内通过 `workspace:*` 引用，TypeScript 即时感知。
+- `@th/shared-utils`：存储、安全、日期、校验、数组等工具，Next.js/Node 两端均可使用，Node-only 工具分模块导出避免打包进前端。
+- 计划新增 `@th/shared-ui`（React 组件）和 `@th/shared-config`（环境配置/Feature Flag），保持组件化与配置可控。
+
+依赖治理策略：
+
+1. 所有通用依赖上移至根目录，锁定版本，子项目只声明特有依赖。
+2. 通过 `pnpm install --filter <app>` 安装局部依赖，减少锁文件冲突。
+3. 严格使用 `workspace:*` 引用共享包，避免手动版本号导致的重复发布。
+
+## 6. 权限与环境隔离
+
+- **环境变量**：在 `apps/*/.env.*` 中维持独立配置，统一通过 `dotenv-flow` 或 Next.js 的内置机制加载，后端使用自定义 loader，避免变量泄露。
+- **API 代理**：Next.js 本地开发通过 `rewrites` 代理到 Koa，生产部署仍使用独立域名，只共享 CI。
+- **访问控制**：利用 `pnpm filter` + `turbo --filter` 确保权限脚本仅在相关目录执行；若需 finer-grained 权限，可结合 Git 子模块或目录级 CI 权限策略。
+
+## 7. CI/CD 与验证流程
+
+1. `pnpm install --frozen-lockfile`
+2. `pnpm turbo run lint type-check --filter=...`
+3. `pnpm turbo run build --filter=@th/*`
+4. `pnpm turbo run build --filter=service-platform-fe`
+5. `pnpm turbo run build --filter=backend-web`
+
+构建产物：
+
+- Next.js 输出 `.next` / `out`，通过 `vercel` 或容器部署。
+- Koa 打包至 `dist`，配合 `pm2` 或容器运行。
+
+## 8. 验收清单
+
+> 1. `pnpm install`、`pnpm dev` 可在任意环境直接启动前后台。  
+> 2. `pnpm turbo run build --filter=@th/*` 可正确产出共享包，供两个应用消费。  
+> 3. 前台、后台能在 monorepo 中保持独立部署与回滚策略。  
+> 4. README 已记录 workspace 结构、脚本别名、subtree 同步命令。  
+> 5. 新成员仅需阅读 README + 本文即可完成环境搭建与开发。  
+> 6. CI pipeline 完整覆盖 lint/type-check/build，出现缓存问题可通过 `pnpm turbo run build --force` 清理。
+
+## 结语
+
+通过 Turborepo + pnpm，将 Next.js 与 Node/Koa 服务整合进 monorepo 的关键在于：规范目录、共享配置、约束依赖、明确权限边界。配置沉淀后，新增共享包或应用都只需复制既有模板并补充脚本，协作效率与交付稳定性都会显著提升。
