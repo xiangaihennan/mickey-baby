@@ -3,24 +3,24 @@ title: '用 Turborepo 整合服务平台前后台：Monorepo 的落地细节'
 date: '2025-09-02'
 tags: ['Monorepo', 'Turborepo', '工程化']
 draft: false
-summary: '分享如何把服务平台的前台（Next.js）与后台（Node/Koa）迁入同一个 Monorepo，并解决依赖、构建与权限隔离问题。'
+summary: '记录如何把服务平台的后台（Umi/Ant Design Pro）与前台（React + Vite）迁入 Turborepo，完整梳理 subtree 引入、依赖治理、构建编排与注意事项。'
 ---
 
-为了把一个 Next.js 前台和一个 Node/Koa 后台整合到统一仓库，我把原目录的配置重新整理成以下几个关键部分：仓库骨架、pnpm 工作区、Turborepo pipeline、共享包与权限隔离策略。实践中遵循「最小改动迁移 → 可复用配置沉淀 → CI/权限收敛」三个阶段，形成可复制的迁移方案。
+为了把 Ant Design Pro（Umi Max）后台与 React + Vite 服务前台整合到同一个 Turborepo，我把原目录配置梳理成一份可复用的迁移清单。本文聚焦多项目迁移的完整流程：前期盘点、subtree 引入与验证、依赖治理、Turborepo 配置、共享包管理以及最终去除子仓库 git 记录，落地一个全新的 monorepo。
 
 ## 1. 初始盘点与目标
 
-- **现状**：两个独立仓库，CI 配置分散、依赖版本不一致、共享代码只能通过 npm 私服或复制粘贴。
-- **目标**：统一依赖管理、让共享类型/工具直接 workspace 复用、打通一条构建与发布流水线，并保证前后台权限隔离。
-- **约束**：Next.js 与 Node/Koa 运行环境不同，迁移过程中需要保持独立部署能力。
+- **现状**：Umi Max 管理后台与 React + Vite 服务前台是两个纯前端仓库，脚本与依赖完全分离，无法就地共享类型/工具。
+- **目标**：统一依赖治理与脚本出口，沉淀共享包，构建一条 Turborepo 流水线，并确保两个应用依旧可以独立发布。
+- **约束**：迁移过程中要确保与同事对齐历史版本，确认代码在 monorepo 中正常运行，再逐步移除原子仓库的 git 记录，最终只保留新的 monorepo 仓库。
 
 ## 2. Monorepo 骨架（整合目录）
 
 ```bash
 th-monorepo/
 ├── apps/
-│   ├── service-platform-fe/    # Next.js 前台
-│   └── backend-web/           # Node/Koa 后台
+│   ├── service-platform-fe/    # React + Vite 服务前台
+│   └── backend-web/            # Umi/Ant Design Pro 管理后台
 ├── packages/
 │   ├── shared-types/          # API/实体类型
 │   ├── shared-utils/          # 通用工具函数
@@ -34,9 +34,10 @@ th-monorepo/
 
 **整合动作**：
 
-1. 使用 `git subtree add --prefix=apps/<app>` 把两个仓库的历史迁入，保持独立版本线。
-2. 在根目录创建统一配置，子应用 `package.json` 仅保留特有脚本/依赖。
-3. README 同步记录结构、脚本别名、subtree 同步命令，降低新人上手成本。
+1. 使用 `git subtree add --prefix=apps/<app>` 把两个历史仓库拉入新仓库，确保 commit 可追溯。
+2. 与原项目负责人确认迁入版本，完成一次联调验证（`pnpm --filter <app> dev`）。
+3. 验证通过后，删除原子仓库的 `.git` 目录和远程引用，在公司 Git 平台上创建新的主仓库，仅保留 Turborepo 版本。
+4. 在 README 中记录 subtree 同步、验证步骤与新仓库的协作方式，方便后续检查历史或必要时再次同步。
 
 ## 3. pnpm 工作区与 TypeScript 配置
 
@@ -115,27 +116,29 @@ packages:
 
 实践要点：
 
-- `dependsOn: ["^build"]` 保证 shared 包先于应用构建。
-- 对 Next.js dev 命令关闭缓存，避免热更新异常。
-- CI 中通过 `pnpm turbo run lint test build --filter=...` 自动推导最小执行集。
+- `dependsOn: ["^build"]` 让共享包先构建，避免 Vite/Umi 在消费时找不到产物。
+- Vite 与 Umi 的 dev 命令都设置 `cache: false`，防止 Turborepo 缓存干扰热更新。
+- CI 使用 `pnpm turbo run lint test build --filter=...` 自动推导最小执行集，减少无意义的重复构建。
 
 ## 5. 共享包与依赖治理
 
-- `@th/shared-types`：沉淀 API Response、用户实体、分页等类型，应用内通过 `workspace:*` 引用，TypeScript 即时感知。
-- `@th/shared-utils`：存储、安全、日期、校验、数组等工具，Next.js/Node 两端均可使用，Node-only 工具分模块导出避免打包进前端。
-- 计划新增 `@th/shared-ui`（React 组件）和 `@th/shared-config`（环境配置/Feature Flag），保持组件化与配置可控。
+- `@th/shared-types`：集中 API Response、分页、菜单、权限、枚举等，Umi/Vite 都以 `workspace:*` 引用，类型修改立即生效。
+- `@th/shared-utils`：封装存储、加密、日期、验证、数组、对象、字符串、数字、URL、文件等工具；在 Node 环境才需要的能力拆分子模块导出，避免被 Vite/Ant Design Pro 客户端 bundle。
+- 规划 `@th/shared-ui` 与 `@th/shared-config`，前者沉淀通用 React 组件，后者管理环境变量/feature flag。
 
 依赖治理策略：
 
-1. 所有通用依赖上移至根目录，锁定版本，子项目只声明特有依赖。
-2. 通过 `pnpm install --filter <app>` 安装局部依赖，减少锁文件冲突。
-3. 严格使用 `workspace:*` 引用共享包，避免手动版本号导致的重复发布。
+1. 通用依赖（React、TypeScript、lint 工具等）上移至根 `package.json`，保持版本锁定。
+2. 子应用仅声明特有依赖（如 `@umijs/max`、`vite`、`@vitejs/plugin-react`），通过 `pnpm install --filter <app>` 维护，自带作用域隔离。
+3. 所有内部包都用 `workspace:*`，避免手动升级版本或意外发布到 npm。
+4. 约定新增包时同步更新 `pnpm-workspace.yaml` 和 Turborepo pipeline，确保依赖拓扑正确。
 
 ## 6. 权限与环境隔离
 
-- **环境变量**：在 `apps/*/.env.*` 中维持独立配置，统一通过 `dotenv-flow` 或 Next.js 的内置机制加载，后端使用自定义 loader，避免变量泄露。
-- **API 代理**：Next.js 本地开发通过 `rewrites` 代理到 Koa，生产部署仍使用独立域名，只共享 CI。
-- **访问控制**：利用 `pnpm filter` + `turbo --filter` 确保权限脚本仅在相关目录执行；若需 finer-grained 权限，可结合 Git 子模块或目录级 CI 权限策略。
+- **环境变量**：`apps/backend-web/.env.*` 与 `apps/service-platform-fe/.env.*` 各自维护，后台通过 Umi 内置配置加载，前台用 Vite `import.meta.env`；敏感变量一律只在 Server Side 注入，避免在共享包中硬编码。
+- **API 代理**：Vite 本地开发使用 `server.proxy` 透传到后台 API，线上仍然是两个独立域名，只在 CI/CD 与共享包层面耦合。
+- **操作权限**：借助 `pnpm filter` + `turbo --filter` 控制命令执行范围，例如后端专属脚本 `pnpm --filter backend-web lint`，避免误操作影响另一侧。
+- **Git 管理**：subtree 引入后要与团队确认最终版本，迁移完成后移除子项目 `.git` 相关文件，确保主仓库成为唯一可信来源。
 
 ## 7. CI/CD 与验证流程
 
@@ -144,21 +147,22 @@ packages:
 3. `pnpm turbo run build --filter=@th/*`
 4. `pnpm turbo run build --filter=service-platform-fe`
 5. `pnpm turbo run build --filter=backend-web`
+6. 与同事核对构建产物与旧仓库比对（hash / 关键页面预览），确认无回归后再 cutover。
 
 构建产物：
 
-- Next.js 输出 `.next` / `out`，通过 `vercel` 或容器部署。
-- Koa 打包至 `dist`，配合 `pm2` 或容器运行。
+- Vite 前台输出到 `dist`/`build`，可直接上传 OSS/CDN。
+- Umi 后台输出 `dist`，配合 Nginx/容器部署，与旧仓库保持一致，便于灰度对比。
 
 ## 8. 验收清单
 
-> 1. `pnpm install`、`pnpm dev` 可在任意环境直接启动前后台。  
-> 2. `pnpm turbo run build --filter=@th/*` 可正确产出共享包，供两个应用消费。  
-> 3. 前台、后台能在 monorepo 中保持独立部署与回滚策略。  
-> 4. README 已记录 workspace 结构、脚本别名、subtree 同步命令。  
-> 5. 新成员仅需阅读 README + 本文即可完成环境搭建与开发。  
-> 6. CI pipeline 完整覆盖 lint/type-check/build，出现缓存问题可通过 `pnpm turbo run build --force` 清理。
+> 1. `pnpm install`、`pnpm dev` 能在任意环境直接启动两个前端项目。  
+> 2. `pnpm turbo run build --filter=@th/*` 可稳定输出共享包，并被 Vite/Umi 引用。  
+> 3. `pnpm turbo run build --filter=service-platform-fe` 与 `--filter=backend-web` 的产物与旧仓库一致，必要时可对比 hash。  
+> 4. README 记录了 workspace 结构、脚本别名、subtree 引入/移除流程。  
+> 5. 新同事按照 README + 本文即可完成环境搭建、共享包引用与 CI 验证。  
+> 6. 出现缓存异常可执行 `pnpm turbo run build --force` 清理，或删除 `.turbo` 目录重新生成。
 
 ## 结语
 
-通过 Turborepo + pnpm，将 Next.js 与 Node/Koa 服务整合进 monorepo 的关键在于：规范目录、共享配置、约束依赖、明确权限边界。配置沉淀后，新增共享包或应用都只需复制既有模板并补充脚本，协作效率与交付稳定性都会显著提升。
+通过 Turborepo + pnpm，把 Umi/Ant Design Pro 后台与 React + Vite 前台迁移到 monorepo 的关键，在于：先用 subtree 精准引入并验证、再统一依赖与配置、最后去除旧仓库绑定。流程一旦沉淀，新项目或共享包的加入都会变成简单的模板化动作，协作效率和交付稳定性也随之提升。
