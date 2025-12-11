@@ -8,6 +8,7 @@ import siteMetadata from '@/data/siteMetadata'
 import Comments from '@/components/comments'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import useProtectedMediaUrl from '@/hooks/useProtectedMediaUrl'
+import kebabCase from '@/lib/utils/kebabCase'
 
 const HiphopLayout = ({ frontMatter, authorDetails, next, prev, children }) => {
   const { slug, fileName, date, title, tags, mediaLink } = frontMatter
@@ -55,7 +56,7 @@ const HiphopLayout = ({ frontMatter, authorDetails, next, prev, children }) => {
                     </h2>
                     <div className="flex flex-wrap">
                       {tags.map((tag) => (
-                        <Tag key={tag} text={tag} />
+                        <Tag key={tag} text={tag} href={`/hiphop/tags/${kebabCase(tag)}`} />
                       ))}
                     </div>
                   </div>
